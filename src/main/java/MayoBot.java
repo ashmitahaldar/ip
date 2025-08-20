@@ -2,9 +2,10 @@ import java.util.Scanner;
 
 public class MayoBot {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         String name = "MayoBot";
+        Scanner scanner = new Scanner(System.in);
         boolean done = false;
+        TaskList taskList = new TaskList();
 
         printLogo();
         printLine();
@@ -17,14 +18,39 @@ public class MayoBot {
             if (input.equalsIgnoreCase("bye")) {
                 done = true;
                 break;
+            } else if (input.equalsIgnoreCase("list")) {
+                taskList.printTasks();
+            } else {
+                taskList.addTask(input);
+                System.out.println("\tadded: " + input);
             }
-            System.out.println("\t" + input);
             printLine();
         }
 
         scanner.close();
         System.out.println("\tBye. Hope to see you again soon!");
         printLine();
+    }
+
+    private static class TaskList {
+        private String[] tasks;
+        private int taskCounter;
+
+        public TaskList() {
+            tasks = new String[100];
+            taskCounter = 0;
+        }
+
+        public void addTask(String task) {
+            tasks[taskCounter] = task;
+            taskCounter++;
+        }
+
+        public void printTasks() {
+            for (int i = 0; i < taskCounter; i++) {
+                System.out.println("\t" + (i + 1) + ". " + tasks[i]);
+            }
+        }
     }
 
     private static void printLine() {
