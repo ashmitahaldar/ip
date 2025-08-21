@@ -14,15 +14,40 @@ public class MayoBot {
         printLine();
         while (!done) {
             String input = scanner.nextLine();
+            String[] tokens = input.split(" ");
             printLine();
-            if (input.equalsIgnoreCase("bye")) {
+            if (tokens[0].equalsIgnoreCase("bye")) {
                 done = true;
                 break;
-            } else if (input.equalsIgnoreCase("list")) {
-                taskList.printTasks();
-            } else {
-                taskList.addTask(input);
-                System.out.println("\tadded: " + input);
+            }
+            boolean success = false;
+            switch (tokens[0]) {
+                case "list":
+                    System.out.println("\tHere are the tasks in your list:");
+                    taskList.printTasks();
+                    break;
+                case "mark":
+                    success = taskList.markTaskAsDone(Integer.parseInt(tokens[1]));
+                    if (success) {
+                        System.out.println("\tNice! I've marked this task as done:");
+                        taskList.printTask(Integer.parseInt(tokens[1]));
+                    } else {
+                        System.out.println("\tSorry, I was not able to mark the specified task as done.");
+                    }
+                    break;
+                case "unmark":
+                    success = taskList.markTaskAsNotDone(Integer.parseInt(tokens[1]));
+                    if (success) {
+                        System.out.println("\tOK, I've marked this task as not done yet:");
+                        taskList.printTask(Integer.parseInt(tokens[1]));
+                    } else {
+                        System.out.println("\tSorry, I was not able to mark the specified task as not done yet.");
+                    }
+                    break;
+                default:
+                    taskList.addTask(input);
+                    System.out.println("\tadded: " + input);
+                    break;
             }
             printLine();
         }
@@ -30,27 +55,6 @@ public class MayoBot {
         scanner.close();
         System.out.println("\tBye. Hope to see you again soon!");
         printLine();
-    }
-
-    private static class TaskList {
-        private String[] tasks;
-        private int taskCounter;
-
-        public TaskList() {
-            tasks = new String[100];
-            taskCounter = 0;
-        }
-
-        public void addTask(String task) {
-            tasks[taskCounter] = task;
-            taskCounter++;
-        }
-
-        public void printTasks() {
-            for (int i = 0; i < taskCounter; i++) {
-                System.out.println("\t" + (i + 1) + ". " + tasks[i]);
-            }
-        }
     }
 
     private static void printLine() {
