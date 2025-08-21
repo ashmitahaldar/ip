@@ -1,3 +1,5 @@
+import exceptions.MayoBotException;
+
 import java.util.Scanner;
 
 public class MayoBot {
@@ -23,7 +25,11 @@ public class MayoBot {
                 done = true;
                 break;
             }
-            runCommand(command, arguments, taskList);
+            try {
+                runCommand(command, arguments, taskList);
+            } catch (exceptions.MayoBotException e) {
+                System.out.println("\t" + e.getMessage());
+            }
             printLine();
         }
 
@@ -57,7 +63,7 @@ public class MayoBot {
         System.out.println("\tNow you have " + taskList.size() + " task(s) in the list.");
     }
 
-    private static void runCommand(String command, String arguments, TaskList taskList) {
+    private static void runCommand(String command, String arguments, TaskList taskList) throws MayoBotException {
         boolean success = false;
         switch (command) {
             case "list":
@@ -65,45 +71,72 @@ public class MayoBot {
                 taskList.printTasks();
                 break;
             case "mark":
-                success = taskList.markTaskAsDone(Integer.parseInt(arguments));
-                if (success) {
-                    System.out.println("\tNice! I've marked this task as done:");
-                    taskList.printTask(Integer.parseInt(arguments));
-                } else {
-                    System.out.println("\tSorry, I was not able to mark the specified task as done.");
+                if (arguments.trim().isEmpty()) {
+                    throw new exceptions.MarkException();
+                }
+                try {
+                    int markIndex = Integer.parseInt(arguments);
+                    success = taskList.markTaskAsDone(markIndex);
+                    if (success) {
+                        System.out.println("\tNice! I've marked this task as done:");
+                        taskList.printTask(markIndex);
+                    } else {
+                        System.out.println("\tSorry, I was not able to mark the specified task as done.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new exceptions.MarkException();
                 }
                 break;
             case "unmark":
-                success = taskList.markTaskAsNotDone(Integer.parseInt(arguments));
-                if (success) {
-                    System.out.println("\tOK, I've marked this task as not done yet:");
-                    taskList.printTask(Integer.parseInt(arguments));
-                } else {
-                    System.out.println("\tSorry, I was not able to mark the specified task as not done yet.");
+                if (arguments.trim().isEmpty()) {
+                    throw new exceptions.UnmarkException();
+                }
+                try {
+                    int unmarkIndex = Integer.parseInt(arguments);
+                    success = taskList.markTaskAsNotDone(unmarkIndex);
+                    if (success) {
+                        System.out.println("\tOK, I've marked this task as not done yet:");
+                        taskList.printTask(unmarkIndex);
+                    } else {
+                        System.out.println("\tSorry, I was not able to mark the specified task as not done yet.");
+                    }
+                } catch (NumberFormatException e) {
+                    throw new exceptions.UnmarkException();
                 }
                 break;
             case "todo":
                 // The arguments for to-do will be the description
+                if (arguments.trim().isEmpty()) {
+                    throw new exceptions.TodoException();
+                }
                 addTask(new Todo(arguments), taskList);
                 break;
             case "deadline":
                 String[] deadlineParts = arguments.split(" /by", 2);
+                if (deadlineParts[0].trim().isEmpty() || deadlineParts.length < 2 || deadlineParts[1].trim().isEmpty()) {
+                    throw new exceptions.MayoBotException("Input is not the correct format for the \"deadline\" command.");
+                }
                 String deadlineDescription = deadlineParts[0];
-                String by = deadlineParts.length > 1 ? deadlineParts[1] : "";
+                String by = deadlineParts[1];
                 addTask(new Deadline(deadlineDescription, by), taskList);
                 break;
             case "event":
                 String[] fromSplit = arguments.split(" /from", 2);
+                if (fromSplit[0].trim().isEmpty() || fromSplit.length < 2) {
+                    throw new exceptions.EventException();
+                }
                 String eventDescription = fromSplit[0];
-                String fromAndTo = fromSplit.length > 1 ? fromSplit[1] : "";
+                String fromAndTo = fromSplit[1];
                 String[] toSplit = fromAndTo.split("/to", 2);
+                if (toSplit[0].trim().isEmpty() || toSplit.length < 2 || toSplit[1].trim().isEmpty()) {
+                    throw new exceptions.EventException();
+                }
                 String eventFrom = toSplit[0];
-                String eventTo = toSplit.length > 1 ? toSplit[1] : "";
+                String eventTo = toSplit[1];
                 addTask(new Event(eventDescription, eventFrom, eventTo), taskList);
                 break;
             default:
-                System.out.println("\tUnknown command: " + command + " " + arguments);
-                break;
+                throw new exceptions.UnknownCommandException(command);
         }
     }
 }
