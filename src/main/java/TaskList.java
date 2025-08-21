@@ -1,14 +1,19 @@
 import java.util.ArrayList;
 
 public class TaskList {
+
     private ArrayList<Task> tasks;
 
     public TaskList() {
         tasks = new ArrayList<>();
     }
 
-    public void addTask(String task) {
-        tasks.add(new Task(task));
+    public int size() {
+        return tasks.size();
+    }
+
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     public void printTask(int index) {
