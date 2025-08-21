@@ -56,13 +56,6 @@ public class MayoBot {
         System.out.println(logo);
     }
 
-    private static void addTask(Task task, TaskList taskList) {
-        taskList.addTask(task);
-        System.out.println("\tGot it. I've added this task:");
-        System.out.println("\t\t" + task);
-        System.out.println("\tNow you have " + taskList.size() + " task(s) in the list.");
-    }
-
     private static void runCommand(String command, String arguments, TaskList taskList) throws MayoBotException {
         boolean success = false;
         switch (command) {
@@ -104,12 +97,25 @@ public class MayoBot {
                     throw new exceptions.UnmarkException();
                 }
                 break;
+            case "delete":
+                if (arguments.trim().isEmpty()) {
+                    throw new exceptions.DeleteException();
+                }
+                try {
+                    int deleteIndex = Integer.parseInt(arguments);
+                    taskList.deleteTask(deleteIndex);
+                } catch (NumberFormatException e) {
+                    throw new exceptions.MarkException();
+                } catch (IndexOutOfBoundsException e) {
+                    throw new exceptions.DeleteException();
+                }
+                break;
             case "todo":
                 // The arguments for to-do will be the description
                 if (arguments.trim().isEmpty()) {
                     throw new exceptions.TodoException();
                 }
-                addTask(new Todo(arguments), taskList);
+                taskList.addTask(new TodoTask(arguments));
                 break;
             case "deadline":
                 String[] deadlineParts = arguments.split(" /by", 2);
@@ -118,7 +124,7 @@ public class MayoBot {
                 }
                 String deadlineDescription = deadlineParts[0];
                 String by = deadlineParts[1];
-                addTask(new Deadline(deadlineDescription, by), taskList);
+                taskList.addTask(new DeadlineTask(deadlineDescription, by));
                 break;
             case "event":
                 String[] fromSplit = arguments.split(" /from", 2);
@@ -133,7 +139,7 @@ public class MayoBot {
                 }
                 String eventFrom = toSplit[0];
                 String eventTo = toSplit[1];
-                addTask(new Event(eventDescription, eventFrom, eventTo), taskList);
+                taskList.addTask(new EventTask(eventDescription, eventFrom, eventTo));
                 break;
             default:
                 throw new exceptions.UnknownCommandException(command);

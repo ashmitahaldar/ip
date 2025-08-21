@@ -14,6 +14,16 @@ public class TaskList {
 
     public void addTask(Task task) {
         tasks.add(task);
+        System.out.println("\tGot it. I've added this task:");
+        System.out.println("\t\t" + task);
+        System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
+    }
+
+    public void deleteTask(int index) {
+        Task deletedTask = tasks.remove(index - 1);
+        System.out.println("\tNoted. I've removed this task:");
+        System.out.println("\t\t" + deletedTask);
+        System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
     }
 
     public void printTask(int index) {

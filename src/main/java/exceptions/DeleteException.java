@@ -1,4 +1,7 @@
 package exceptions;
 
-public class DeleteException {
+public class DeleteException extends MayoBotException{
+    public DeleteException() {
+        super("Input is incorrect for the \"delete\" command.");
+    }
 }
