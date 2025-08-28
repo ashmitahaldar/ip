@@ -47,7 +47,6 @@ public class Storage {
         }
     }
 
-
     public static void saveTasks(TaskList taskList) {
         File file = new File(FILE_PATH);
         File directory = file.getParentFile();
