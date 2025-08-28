@@ -78,7 +78,8 @@ public class Command {
                 if (arguments.trim().isEmpty()) {
                     throw new exceptions.TodoException();
                 }
-                taskList.addTask(new TodoTask(arguments));
+                Task newTodoTask = new TodoTask(arguments);
+                taskList.addTask(newTodoTask);
                 break;
             case "deadline":
                 String[] deadlineParts = arguments.split(" /by", 2);
@@ -90,7 +91,8 @@ public class Command {
                 }
                 String deadlineDescription = deadlineParts[0];
                 String by = deadlineParts[1];
-                taskList.addTask(new DeadlineTask(deadlineDescription, by));
+                Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
+                taskList.addTask(newDeadlineTask);
                 break;
             case "event":
                 String[] fromSplit = arguments.split(" /from", 2);
@@ -105,7 +107,8 @@ public class Command {
                 }
                 String eventFrom = toSplit[0];
                 String eventTo = toSplit[1];
-                taskList.addTask(new EventTask(eventDescription, eventFrom, eventTo));
+                Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
+                taskList.addTask(newEventTask);
                 break;
             default:
                 throw new exceptions.UnknownCommandException(command);

@@ -24,6 +24,10 @@ public abstract class Task {
         isDone = false;
     }
 
+    public String toFileFormat() {
+        return (isDone ? "1" : "0") + " | " + description;
+    }
+
     @Override
     public String toString() {
         return "[" + this.getStatusIcon() + "] " + this.getDescription();

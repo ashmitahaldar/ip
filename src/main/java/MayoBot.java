@@ -1,5 +1,7 @@
 import exceptions.MayoBotException;
+import exceptions.StorageException;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MayoBot {
@@ -7,7 +9,7 @@ public class MayoBot {
         String name = "MayoBot";
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
-        TaskList taskList = new TaskList();
+        TaskList taskList = loadTaskList();
 
         printLogo();
         printLine();
@@ -52,5 +54,17 @@ public class MayoBot {
                 + "|  |      |  |\\ (_ o _) / \\      /      '. \\_/``\".'  |  (_,_)  /  '. \\_/``\".'    (_I_)\n"
                 + "'--'      '--' '.(_,_).'   `-..-'         '-----'    /_______.'     '-----'      '---'\n";
         System.out.println(logo);
+    }
+
+    private static TaskList loadTaskList() {
+        TaskList taskList = null;
+        try {
+            taskList = Storage.loadTasks();
+        } catch (IOException e) {
+            System.out.println("\tRan into error when dealing with tasks.txt. Creating new task list...");
+        }
+        return taskList != null
+                ? taskList
+                : new TaskList();
     }
 }

@@ -14,13 +14,23 @@ public class TaskList {
 
     public void addTask(Task task) {
         tasks.add(task);
+        Storage.saveTask(task);
         System.out.println("\tGot it. I've added this task:");
         System.out.println("\t\t" + task);
         System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
     }
 
+    public void addTaskToList(Task task) {
+        tasks.add(task);
+    }
+
+    public Task getTask(int index) {
+        return tasks.get(index);
+    }
+
     public void deleteTask(int index) {
         Task deletedTask = tasks.remove(index - 1);
+        Storage.saveTasks(this);
         System.out.println("\tNoted. I've removed this task:");
         System.out.println("\t\t" + deletedTask);
         System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
@@ -40,6 +50,7 @@ public class TaskList {
     public boolean markTaskAsDone(int index) {
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsDone();
+            Storage.saveTasks(this);
             return true;
         } else {
             return false;
@@ -50,6 +61,7 @@ public class TaskList {
     public boolean markTaskAsNotDone(int index) {
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsNotDone();
+            Storage.saveTasks(this);
             return true;
         } else {
             return false;
