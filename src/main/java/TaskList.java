@@ -14,9 +14,19 @@ public class TaskList {
 
     public void addTask(Task task) {
         tasks.add(task);
+        Storage.saveTask(task);
         System.out.println("\tGot it. I've added this task:");
         System.out.println("\t\t" + task);
         System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
+    }
+
+    public void addTaskSilently(Task task) {
+        tasks.add(task);
+        Storage.saveTask(task);
+    }
+
+    public Task getTask(int index) {
+        return tasks.get(index);
     }
 
     public void deleteTask(int index) {
