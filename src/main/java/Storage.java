@@ -58,17 +58,9 @@ public class Storage {
             for (int i = 0; i < taskList.size(); i++) {
                 Task task = taskList.getTask(i);
                 writer.write(task.toFileFormat() + "\n");
-                writer.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    // TODO: Finish implementation of markTaskAsDone method
-    public static void markTaskAsDone(Task task) {
-        File file = new File(FILE_PATH);
-        File directory = file.getParentFile();
-        // find the task within the file and change the 0 to 1, assume file exists
     }
 }

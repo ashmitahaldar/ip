@@ -49,6 +49,7 @@ public class TaskList {
     public boolean markTaskAsDone(int index) {
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsDone();
+            Storage.saveTasks(this);
             return true;
         } else {
             return false;
@@ -59,6 +60,7 @@ public class TaskList {
     public boolean markTaskAsNotDone(int index) {
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsNotDone();
+            Storage.saveTasks(this);
             return true;
         } else {
             return false;
