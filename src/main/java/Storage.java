@@ -26,7 +26,7 @@ public class Storage {
                 String line = scanner.nextLine();
                 Task task = Parser.parseTaskFromFile(line);
                 if (task != null) {
-                    taskList.addTaskSilently(task);
+                    taskList.addTaskToList(task);
                 }
             }
         }
@@ -35,8 +35,12 @@ public class Storage {
 
     public static void saveTask(Task task) {
         File file = new File(FILE_PATH);
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(task.toFileFormat());
+        File directory = file.getParentFile();
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        try (FileWriter writer = new FileWriter(file, true)) {
+            writer.write(task.toFileFormat() + "\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,6 +51,9 @@ public class Storage {
     public static void saveTasks(TaskList taskList) {
         File file = new File(FILE_PATH);
         File directory = file.getParentFile();
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
         try (FileWriter writer = new FileWriter(file)) {
             for (int i = 0; i < taskList.size(); i++) {
                 Task task = taskList.getTask(i);

@@ -20,9 +20,8 @@ public class TaskList {
         System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
     }
 
-    public void addTaskSilently(Task task) {
+    public void addTaskToList(Task task) {
         tasks.add(task);
-        Storage.saveTask(task);
     }
 
     public Task getTask(int index) {
