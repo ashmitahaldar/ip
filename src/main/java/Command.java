@@ -3,10 +3,12 @@ import exceptions.MayoBotException;
 public class Command {
     private String command;
     private String arguments;
+    private boolean isExit;
 
     public Command(String command, String arguments) {
         this.command = command;
         this.arguments = arguments;
+        this.isExit = false;
     }
 
     public String getCommand() {
@@ -17,14 +19,21 @@ public class Command {
         return arguments;
     }
 
-    public static void execute(Command commandInput, TaskList taskList) throws MayoBotException {
+    public boolean isExit() {
+        return isExit;
+    }
+
+    public void execute(TaskList taskList) throws MayoBotException {
         boolean success;
-        String command = commandInput.getCommand();
-        String arguments = commandInput.getArguments();
+        String command = this.getCommand();
+        String arguments = this.getArguments();
         switch (command) {
             case "list":
                 System.out.println("\tHere are the tasks in your list:");
                 taskList.printTasks();
+                break;
+            case "bye":
+                this.isExit = true;
                 break;
             case "mark":
                 if (arguments.trim().isEmpty()) {
