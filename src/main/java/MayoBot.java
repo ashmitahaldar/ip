@@ -1,70 +1,50 @@
 import exceptions.MayoBotException;
-import exceptions.StorageException;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class MayoBot {
-    public static void main(String[] args) {
-        String name = "MayoBot";
-        Scanner scanner = new Scanner(System.in);
-        boolean done = false;
-        TaskList taskList = loadTaskList();
 
-        printLogo();
-        printLine();
-        System.out.println("\tHello, I'm " + name);
-        System.out.println("\tWhat can I do for you?");
-        printLine();
+    private Ui ui;
+    private Storage storage;
+    private TaskList taskList;
 
-        while (!done) {
-            String input = scanner.nextLine();
-            Command commandInput = Parser.parse(input);
-            printLine();
-            if (commandInput.getCommand().equalsIgnoreCase("bye"))  {
-                done = true;
-                break;
-            }
+    public MayoBot(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        taskList = loadTaskList();
+    }
+
+    public void run() {
+        ui.showWelcome();
+        boolean isExit = false;
+
+        while (!isExit) {
             try {
-                Command.execute(commandInput, taskList);
-            } catch (exceptions.MayoBotException e) {
-                System.out.println("\t" + e.getMessage());
+                String input = ui.readCommand();
+                Command commandInput = Parser.parse(input);
+                ui.showLine();
+                commandInput.execute(taskList);
+                isExit = commandInput.isExit();
+            } catch (MayoBotException e) {
+                ui.showError(e.getMessage());
+            } finally {
+                ui.showLine();
             }
-            printLine();
         }
-
-        scanner.close();
-        System.out.println("\tBye. Hope to see you again soon!");
-        printLine();
+        ui.close();
+        ui.showGoodbye();
     }
 
-    private static void printLine() {
-        String line = "\t--------------------------------------------------------------------------------------";
-        System.out.println(line);
+    public static void main(String[] args) {
+        new MayoBot("./data/tasks.txt").run();
     }
 
-    private static void printLogo() {
-        String logo = ",---.    ,---.   ____       ____     __   ,-----.     _______       ,-----.  ,---------.\n"
-                + "|    \\  /    | .'  __ `.    \\   \\   /  /.'  .-,  '.  \\  ____  \\   .'  .-,  '.\\          \\\n"
-                + "|  ,  \\/  ,  |/   '  \\  \\    \\  _. /  '/ ,-.|  \\ _ \\ | |    \\ |  / ,-.|  \\ _ \\`--.  ,---'\n"
-                + "|  |\\_   /|  ||___|  /  |     _( )_ .';  \\  '_ /  | :| |____/ / ;  \\  '_ /  | :  |   \\\n"
-                + "|  _( )_/ |  |   _.-`   | ___(_ o _)' |  _`,/ \\ _/  ||   _ _ '. |  _`,/ \\ _/  |  :_ _:\n"
-                + "| (_ o _) |  |.'   _    ||   |(_,_)'  : (  '\\_/ \\   ;|  ( ' )  \\: (  '\\_/ \\   ;  (_I_)\n"
-                + "|  (_,_)  |  ||  _( )_  ||   `-'  /    \\ `\"/  \\  ) / | (_{;}_) | \\ `\"/  \\  ) /  (_(=)_)\n"
-                + "|  |      |  |\\ (_ o _) / \\      /      '. \\_/``\".'  |  (_,_)  /  '. \\_/``\".'    (_I_)\n"
-                + "'--'      '--' '.(_,_).'   `-..-'         '-----'    /_______.'     '-----'      '---'\n";
-        System.out.println(logo);
-    }
-
-    private static TaskList loadTaskList() {
-        TaskList taskList = null;
+    private TaskList loadTaskList() {
         try {
-            taskList = Storage.loadTasks();
+            return storage.loadTasks();
         } catch (IOException e) {
             System.out.println("\tRan into error when dealing with tasks.txt. Creating new task list...");
+            return new TaskList(storage);
         }
-        return taskList != null
-                ? taskList
-                : new TaskList();
     }
 }
