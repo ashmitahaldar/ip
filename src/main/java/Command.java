@@ -91,8 +91,12 @@ public class Command {
                 }
                 String deadlineDescription = deadlineParts[0];
                 String by = deadlineParts[1];
-                Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
-                taskList.addTask(newDeadlineTask);
+                try {
+                    Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
+                    taskList.addTask(newDeadlineTask);
+                } catch (IllegalArgumentException e) {
+                    throw new exceptions.MayoBotException("Date format error: " + e.getMessage());
+                }
                 break;
             case "event":
                 String[] fromSplit = arguments.split(" /from", 2);
@@ -107,8 +111,12 @@ public class Command {
                 }
                 String eventFrom = toSplit[0];
                 String eventTo = toSplit[1];
-                Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
-                taskList.addTask(newEventTask);
+                try {
+                    Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
+                    taskList.addTask(newEventTask);
+                } catch (IllegalArgumentException e) {
+                    throw new exceptions.MayoBotException("Date format error: " + e.getMessage());
+                }
                 break;
             default:
                 throw new exceptions.UnknownCommandException(command);
