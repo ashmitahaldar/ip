@@ -41,7 +41,6 @@ public class Storage {
         }
         try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(task.toFileFormat() + "\n");
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

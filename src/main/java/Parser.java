@@ -1,3 +1,5 @@
+import java.time.LocalDateTime;
+
 public class Parser {
     public static Command parse(String input) {
         String[] parts = input.split(" ", 2);
@@ -23,12 +25,15 @@ public class Parser {
             break;
         case "D":
             if (parts.length >= 4) {
-                task = new DeadlineTask(description, parts[3]);
+                LocalDateTime by = LocalDateTime.parse(parts[3]);
+                task = new DeadlineTask(description, by);
             }
             break;
         case "E":
             if (parts.length >= 5) {
-                task = new EventTask(description, parts[3], parts[4]);
+                LocalDateTime from = LocalDateTime.parse(parts[3]);
+                LocalDateTime to = LocalDateTime.parse(parts[4]);
+                task = new EventTask(description, from, to);
             }
             break;
         }
