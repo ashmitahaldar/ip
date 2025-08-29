@@ -23,13 +23,13 @@ public class Command {
         return isExit;
     }
 
-    public void execute(TaskList taskList) throws MayoBotException {
+    public void execute(Ui ui, TaskList taskList) throws MayoBotException {
         boolean success;
         String command = this.getCommand();
         String arguments = this.getArguments();
         switch (command) {
             case "list":
-                System.out.println("\tHere are the tasks in your list:");
+                ui.showMessage("Here are the tasks in your list:");
                 taskList.printTasks();
                 break;
             case "bye":
@@ -43,10 +43,10 @@ public class Command {
                     int markIndex = Integer.parseInt(arguments);
                     success = taskList.markTaskAsDone(markIndex);
                     if (success) {
-                        System.out.println("\tNice! I've marked this task as done:");
+                        ui.showMessage("Nice! I've marked this task as done:");
                         taskList.printTask(markIndex);
                     } else {
-                        System.out.println("\tSorry, I was not able to mark the specified task as done.");
+                        ui.showMessage("Sorry, I was not able to mark the specified task as done.");
                     }
                 } catch (NumberFormatException e) {
                     throw new exceptions.MarkException();
@@ -60,10 +60,10 @@ public class Command {
                     int unmarkIndex = Integer.parseInt(arguments);
                     success = taskList.markTaskAsNotDone(unmarkIndex);
                     if (success) {
-                        System.out.println("\tOK, I've marked this task as not done yet:");
+                        ui.showMessage("OK, I've marked this task as not done yet:");
                         taskList.printTask(unmarkIndex);
                     } else {
-                        System.out.println("\tSorry, I was not able to mark the specified task as not done yet.");
+                        ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
                     }
                 } catch (NumberFormatException e) {
                     throw new exceptions.UnmarkException();
@@ -83,7 +83,6 @@ public class Command {
                 }
                 break;
             case "todo":
-                // The arguments for to-do will be the description
                 if (arguments.trim().isEmpty()) {
                     throw new exceptions.TodoException();
                 }

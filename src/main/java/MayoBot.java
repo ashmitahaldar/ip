@@ -23,7 +23,7 @@ public class MayoBot {
                 String input = ui.readCommand();
                 Command commandInput = Parser.parse(input);
                 ui.showLine();
-                commandInput.execute(taskList);
+                commandInput.execute(ui, taskList);
                 isExit = commandInput.isExit();
             } catch (MayoBotException e) {
                 ui.showError(e.getMessage());

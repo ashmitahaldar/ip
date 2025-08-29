@@ -28,6 +28,10 @@ public class Ui {
         scanner.close();
     }
 
+    public void showMessage(String message) {
+        System.out.println("\t" + message);
+    }
+
     public void showError(String message) {
         System.out.println("\t" + message);
     }
