@@ -1,4 +1,4 @@
-package exceptions;
+package MayoBot.exceptions;
 
 public class StorageException extends MayoBotException {
     public StorageException() {

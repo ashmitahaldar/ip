@@ -1,4 +1,4 @@
-package exceptions;
+package MayoBot.exceptions;
 
 public class TodoException extends MayoBotException {
     public TodoException() {

@@ -1,4 +1,4 @@
-package exceptions;
+package MayoBot.exceptions;
 
 public class DeleteException extends MayoBotException{
     public DeleteException() {
