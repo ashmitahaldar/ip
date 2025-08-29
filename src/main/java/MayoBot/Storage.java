@@ -1,3 +1,8 @@
+package MayoBot;
+
+import MayoBot.task.Task;
+import MayoBot.task.TaskList;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

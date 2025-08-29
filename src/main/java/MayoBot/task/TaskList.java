@@ -1,3 +1,7 @@
+package MayoBot.task;
+
+import MayoBot.Storage;
+
 import java.util.ArrayList;
 
 public class TaskList {

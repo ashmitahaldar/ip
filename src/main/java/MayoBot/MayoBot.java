@@ -1,4 +1,7 @@
-import exceptions.MayoBotException;
+package MayoBot;
+
+import MayoBot.exceptions.MayoBotException;
+import MayoBot.task.TaskList;
 
 import java.io.IOException;
 

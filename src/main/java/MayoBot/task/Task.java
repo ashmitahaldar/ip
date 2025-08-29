@@ -1,3 +1,5 @@
+package MayoBot.task;
+
 public abstract class Task {
 
     protected String description;

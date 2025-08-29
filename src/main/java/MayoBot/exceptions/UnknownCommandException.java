@@ -1,4 +1,4 @@
-package exceptions;
+package MayoBot.exceptions;
 
 public class UnknownCommandException extends MayoBotException {
     public UnknownCommandException(String message) {
