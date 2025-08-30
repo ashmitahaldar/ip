@@ -28,11 +28,12 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("MayoBot.MayoBot")
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "MayoBot"
+    archiveFileName = 'mayobot.jar'
     archiveClassifier = null
 }
 
