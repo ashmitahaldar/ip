@@ -12,7 +12,7 @@ public class Ui {
     public void showWelcome() {
         showLogo();
         showLine();
-        System.out.println("\tHello, I'm MayoBot.MayoBot!");
+        System.out.println("\tHello, I'm MayoBot!");
         System.out.println("\tWhat can I do for you?");
         showLine();
     }
