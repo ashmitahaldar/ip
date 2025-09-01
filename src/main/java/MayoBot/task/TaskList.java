@@ -73,4 +73,38 @@ public class TaskList {
             return false;
         }
     }
+
+    /**
+     * Finds and displays all tasks that contain the specified search term.
+     * Searches through all task descriptions for the given keyword and displays
+     * matching tasks with their original numbering. The search is case-insensitive
+     * and matches partial strings within task descriptions.
+     * <p>
+     * If no tasks match the search term, displays an appropriate message to the user.
+     * Matching tasks are displayed with the same formatting as the regular task list,
+     * including task type indicators and completion status.
+     *
+     * @param searchTerm the keyword to search for in task descriptions
+     */
+    public void findTask(String searchTerm) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        ArrayList<Integer> matchingIndices = new ArrayList<>();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().toLowerCase().contains(searchTerm.toLowerCase())) {
+                matchingTasks.add(task);
+                matchingIndices.add(i + 1); // Store 1-based index
+            }
+        }
+
+        if (matchingTasks.isEmpty()) {
+            System.out.println("\tNo matching tasks found.");
+        } else {
+            System.out.println("\tHere are the matching tasks in your list:");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.println("\t" + matchingIndices.get(i) + "." + matchingTasks.get(i));
+            }
+        }
+    }
 }

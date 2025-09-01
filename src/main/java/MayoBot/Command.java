@@ -139,6 +139,13 @@ public class Command {
                     throw new MayoBotException("Date format error: " + e.getMessage());
                 }
                 break;
+            case "find":
+                if (arguments.trim().isEmpty()) {
+                    ui.showMessage("Please specify a search term.");
+                } else {
+                    taskList.findTask(arguments.trim());
+                }
+            break;
             default:
                 throw new UnknownCommandException(command);
         }
