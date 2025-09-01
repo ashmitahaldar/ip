@@ -1,6 +1,7 @@
 package MayoBot.task;
 
 import MayoBot.Storage;
+import MayoBot.Ui;
 
 import java.util.ArrayList;
 
@@ -42,14 +43,14 @@ public class TaskList {
         System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
     }
 
-    public void printTask(int index) {
-        System.out.println("\t" + tasks.get(index - 1));
+    public void printTask(int index, Ui ui) {
+        ui.showMessage(tasks.get(index - 1).toString());
     }
 
-    public void printTasks() {
+    public void printTasks(Ui ui) {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
-            System.out.println("\t" + (i + 1) + ". " + task);
+            ui.showMessage((i + 1) + ". " + task);
         }
     }
 
@@ -75,36 +76,27 @@ public class TaskList {
     }
 
     /**
-     * Finds and displays all tasks that contain the specified search term.
-     * Searches through all task descriptions for the given keyword and displays
+     * Finds and returns all tasks that contain the specified search term.
+     * Searches through all task descriptions for the given keyword and returns
      * matching tasks with their original numbering. The search is case-insensitive
      * and matches partial strings within task descriptions.
      * <p>
-     * If no tasks match the search term, displays an appropriate message to the user.
-     * Matching tasks are displayed with the same formatting as the regular task list,
-     * including task type indicators and completion status.
+     * Returns an empty list if no tasks match the search term. The returned
+     * indices correspond to the original task positions in the main task list.
      *
      * @param searchTerm the keyword to search for in task descriptions
+     * @return an ArrayList containing arrays of [originalIndex, matchingTask]
      */
-    public void findTask(String searchTerm) {
-        ArrayList<Task> matchingTasks = new ArrayList<>();
-        ArrayList<Integer> matchingIndices = new ArrayList<>();
+    public ArrayList<Object[]> findTask(String searchTerm) {
+        ArrayList<Object[]> matchingResults = new ArrayList<>();
 
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
             if (task.getDescription().toLowerCase().contains(searchTerm.toLowerCase())) {
-                matchingTasks.add(task);
-                matchingIndices.add(i + 1); // Store 1-based index
+                matchingResults.add(new Object[]{i + 1, task}); // Store 1-based index and task
             }
         }
 
-        if (matchingTasks.isEmpty()) {
-            System.out.println("\tNo matching tasks found.");
-        } else {
-            System.out.println("\tHere are the matching tasks in your list:");
-            for (int i = 0; i < matchingTasks.size(); i++) {
-                System.out.println("\t" + matchingIndices.get(i) + "." + matchingTasks.get(i));
-            }
-        }
+        return matchingResults;
     }
 }

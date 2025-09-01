@@ -14,6 +14,8 @@ import MayoBot.task.TodoTask;
 import MayoBot.task.DeadlineTask;
 import MayoBot.task.EventTask;
 
+import java.util.ArrayList;
+
 public class Command {
     private String command;
     private String arguments;
@@ -44,7 +46,7 @@ public class Command {
         switch (command) {
             case "list":
                 ui.showMessage("Here are the tasks in your list:");
-                taskList.printTasks();
+                taskList.printTasks(ui);
                 break;
             case "bye":
                 this.isExit = true;
@@ -58,7 +60,7 @@ public class Command {
                     success = taskList.markTaskAsDone(markIndex);
                     if (success) {
                         ui.showMessage("Nice! I've marked this task as done:");
-                        taskList.printTask(markIndex);
+                        taskList.printTask(markIndex, ui);
                     } else {
                         ui.showMessage("Sorry, I was not able to mark the specified task as done.");
                     }
@@ -75,7 +77,7 @@ public class Command {
                     success = taskList.markTaskAsNotDone(unmarkIndex);
                     if (success) {
                         ui.showMessage("OK, I've marked this task as not done yet:");
-                        taskList.printTask(unmarkIndex);
+                        taskList.printTask(unmarkIndex, ui);
                     } else {
                         ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
                     }
@@ -143,9 +145,19 @@ public class Command {
                 if (arguments.trim().isEmpty()) {
                     ui.showMessage("Please specify a search term.");
                 } else {
-                    taskList.findTask(arguments.trim());
+                    ArrayList<Object[]> matchingTasks = taskList.findTask(arguments.trim());
+                    if (matchingTasks.isEmpty()) {
+                        ui.showMessage("No matching tasks found.");
+                    } else {
+                        ui.showMessage("Here are the matching tasks in your list:");
+                        for (Object[] result : matchingTasks) {
+                            int index = (Integer) result[0];
+                            Task task = (Task) result[1];
+                            ui.showMessage(index + ". " + task);
+                        }
+                    }
                 }
-            break;
+                break;
             default:
                 throw new UnknownCommandException(command);
         }
