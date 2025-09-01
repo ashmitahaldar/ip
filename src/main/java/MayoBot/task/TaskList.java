@@ -1,6 +1,7 @@
 package MayoBot.task;
 
 import MayoBot.Storage;
+import MayoBot.Ui;
 
 import java.util.ArrayList;
 
@@ -127,8 +128,8 @@ public class TaskList {
      * @param index the one-based index of the task to display
      * @throws IndexOutOfBoundsException if the index is out of range
      */
-    public void printTask(int index) {
-        System.out.println("\t" + tasks.get(index - 1));
+    public void printTask(int index, Ui ui) {
+        ui.showMessage(tasks.get(index - 1).toString());
     }
 
     /**
@@ -140,10 +141,10 @@ public class TaskList {
      * If the list is empty, no output is produced. The display format
      * includes the task number, followed by the task's string representation.
      */
-    public void printTasks() {
+    public void printTasks(Ui ui) {
         for (int i = 0; i < tasks.size(); i++) {
             Task task = tasks.get(i);
-            System.out.println("\t" + (i + 1) + ". " + task);
+            ui.showMessage((i + 1) + ". " + task);
         }
     }
 
@@ -192,5 +193,30 @@ public class TaskList {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Finds and returns all tasks that contain the specified search term.
+     * Searches through all task descriptions for the given keyword and returns
+     * matching tasks with their original numbering. The search is case-insensitive
+     * and matches partial strings within task descriptions.
+     * <p>
+     * Returns an empty list if no tasks match the search term. The returned
+     * indices correspond to the original task positions in the main task list.
+     *
+     * @param searchTerm the keyword to search for in task descriptions
+     * @return an ArrayList containing arrays of [originalIndex, matchingTask]
+     */
+    public ArrayList<Object[]> findTask(String searchTerm) {
+        ArrayList<Object[]> matchingResults = new ArrayList<>();
+
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            if (task.getDescription().toLowerCase().contains(searchTerm.toLowerCase())) {
+                matchingResults.add(new Object[]{i + 1, task}); // Store 1-based index and task
+            }
+        }
+
+        return matchingResults;
     }
 }
