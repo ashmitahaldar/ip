@@ -16,11 +16,11 @@ import java.time.format.DateTimeParseException;
  */
 public class EventTask extends Task {
 
-    protected LocalDateTime from;
-    protected LocalDateTime to;
-
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
     /**
      * Creates a new EventTask with the specified description and time period strings.

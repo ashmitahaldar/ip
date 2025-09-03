@@ -1,9 +1,9 @@
 package MayoBot.task;
 
+import java.util.ArrayList;
+
 import MayoBot.Storage;
 import MayoBot.Ui;
-
-import java.util.ArrayList;
 
 /**
  * Manages a collection of tasks and provides operations for task manipulation.

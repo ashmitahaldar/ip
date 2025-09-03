@@ -1,12 +1,12 @@
 package MayoBot;
 
-import MayoBot.task.Task;
-import MayoBot.task.TaskList;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
+import MayoBot.task.Task;
+import MayoBot.task.TaskList;
 
 /**
  * Handles persistent storage operations for task data.
@@ -19,8 +19,7 @@ import java.util.Scanner;
  * to ensure the storage path exists before file operations.
  */
 public class Storage {
-    public final String FILE_PATH;
-
+    private final String filePath;
 
     /**
      * Creates a new Storage instance with the specified file path.
@@ -30,7 +29,7 @@ public class Storage {
      * @param filePath the path to the file where tasks should be stored
      */
     public Storage(String filePath) {
-        FILE_PATH = filePath;
+        this.filePath = filePath;
     }
 
     /**
@@ -51,7 +50,7 @@ public class Storage {
      */
     public TaskList loadTasks() throws IOException {
         TaskList taskList = new TaskList(this);
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
 
         File directory = file.getParentFile();
         if (!directory.exists()) {
@@ -90,7 +89,7 @@ public class Storage {
      * @see Task#toFileFormat()
      */
     public void saveTask(Task task) {
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         File directory = file.getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
@@ -117,7 +116,7 @@ public class Storage {
      * @see TaskList
      */
     public void saveTasks(TaskList taskList) {
-        File file = new File(FILE_PATH);
+        File file = new File(filePath);
         File directory = file.getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
