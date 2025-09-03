@@ -1,22 +1,27 @@
 package MayoBot;
 
-import MayoBot.exceptions.MayoBotException;
-import MayoBot.exceptions.MarkException;
-import MayoBot.task.TaskList;
-import MayoBot.task.TodoTask;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import MayoBot.exceptions.MarkException;
+import MayoBot.exceptions.MayoBotException;
+import MayoBot.task.TaskList;
+import MayoBot.task.TodoTask;
 
 public class CommandTest {
-    private final String TEST_FILE = "./test_data/command_test.txt";
+    private static final String TEST_FILE = "./test_data/command_test.txt";
+
     private TaskList taskList;
     private Ui ui;
     private ByteArrayOutputStream outputStream;

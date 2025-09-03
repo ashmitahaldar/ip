@@ -1,14 +1,16 @@
 package MayoBot;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UiTest {
     private Ui ui;
@@ -64,17 +66,17 @@ public class UiTest {
     }
 
     // TODO: Fix this test and feature
-//    @Test
-//    public void ui_readCommand_readsEmptyInput() {
-//        String testInput = "";
-//        System.setIn(new ByteArrayInputStream(testInput.getBytes()));
-//
-//        Ui testUi = new Ui();
-//        String result = testUi.readCommand();
-//
-//        assertEquals(testInput, result);
-//        testUi.close();
-//    }
+    //    @Test
+    //    public void ui_readCommand_readsEmptyInput() {
+    //        String testInput = "";
+    //        System.setIn(new ByteArrayInputStream(testInput.getBytes()));
+    //
+    //        Ui testUi = new Ui();
+    //        String result = testUi.readCommand();
+    //
+    //        assertEquals(testInput, result);
+    //        testUi.close();
+    //    }
 
     @Test
     public void ui_readCommand_readsInputWithNewline() {
@@ -120,7 +122,8 @@ public class UiTest {
         ui.showLine();
 
         String output = outputStream.toString();
-        assertTrue(output.contains("--------------------------------------------------------------------------------------"));
+        assertTrue(output.contains(
+                "--------------------------------------------------------------------------------------"));
         assertTrue(output.contains("\t"));
     }
 
@@ -132,7 +135,8 @@ public class UiTest {
 
         String output = outputStream.toString();
         long lineCount = output.lines()
-                .filter(line -> line.contains("--------------------------------------------------------------------------------------"))
+                .filter(line -> line.contains(
+                        "--------------------------------------------------------------------------------------"))
                 .count();
         assertEquals(2, lineCount);
     }
@@ -171,7 +175,8 @@ public class UiTest {
 
         // Should have line separators
         long separatorCount = output.lines()
-                .filter(line -> line.contains("--------------------------------------------------------------------------------------"))
+                .filter(line -> line.contains(
+                        "--------------------------------------------------------------------------------------"))
                 .count();
         assertEquals(2, separatorCount);
     }

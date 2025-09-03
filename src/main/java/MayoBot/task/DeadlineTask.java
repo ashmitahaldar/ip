@@ -16,10 +16,10 @@ import java.time.format.DateTimeParseException;
  */
 public class DeadlineTask extends Task {
 
-    protected LocalDateTime by;
-
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+
+    protected LocalDateTime by;
 
     /**
      * Creates a new DeadlineTask with the specified description and deadline string.

@@ -1,12 +1,12 @@
 package MayoBot;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import MayoBot.task.DeadlineTask;
 import MayoBot.task.EventTask;
 import MayoBot.task.Task;
 import MayoBot.task.TodoTask;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Utility class for parsing user input and file data into Command and Task objects.
@@ -79,6 +79,8 @@ public class Parser {
                 task = new EventTask(description, from, to);
             }
             break;
+        default:
+            return null;
         }
 
         if (task != null && isDone) {

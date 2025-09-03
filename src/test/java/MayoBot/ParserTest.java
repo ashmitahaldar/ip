@@ -1,11 +1,18 @@
 package MayoBot;
 
-import MayoBot.task.TodoTask;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import MayoBot.task.DeadlineTask;
 import MayoBot.task.EventTask;
 import MayoBot.task.Task;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import MayoBot.task.TodoTask;
 
 public class ParserTest {
 

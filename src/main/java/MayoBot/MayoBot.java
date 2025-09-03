@@ -1,9 +1,9 @@
 package MayoBot;
 
+import java.io.IOException;
+
 import MayoBot.exceptions.MayoBotException;
 import MayoBot.task.TaskList;
-
-import java.io.IOException;
 
 /**
  * Main application class that orchestrates the MayoBot task management system.

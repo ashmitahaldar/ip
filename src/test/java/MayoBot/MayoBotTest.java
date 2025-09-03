@@ -1,12 +1,9 @@
 package MayoBot;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,9 +11,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 public class MayoBotTest {
-    private final String TEST_FILE = "./test_data/mayobot_test.txt";
-    private final String TEST_DIR = "./test_data";
+    private static final String TEST_FILE = "./test_data/mayobot_test.txt";
+    private static final String TEST_DIR = "./test_data";
     private ByteArrayOutputStream outputStream;
     private PrintStream originalOut;
 
