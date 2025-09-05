@@ -1,4 +1,4 @@
-package MayoBot;
+package MayoBot.ui;
 
 import java.util.Scanner;
 
@@ -39,6 +39,13 @@ public class Ui {
         System.out.println("\tHello, I'm MayoBot!");
         System.out.println("\tWhat can I do for you?");
         showLine();
+    }
+
+    public String getWelcome() {
+        StringBuilder welcome = new StringBuilder();
+        welcome.append("Hello, I'm MayoBot!" + "\n");
+        welcome.append("What can I do for you?");
+        return welcome.toString();
     }
 
     /**
