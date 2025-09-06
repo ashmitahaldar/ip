@@ -25,9 +25,11 @@ public class Main extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
+            stage.setTitle("MayoBot");
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
+            stage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/icon.png")));
             fxmlLoader.<MainWindow>getController().setMayoBot(mayoBot);  // inject the MayoBot instance
             stage.show();
         } catch (IOException e) {

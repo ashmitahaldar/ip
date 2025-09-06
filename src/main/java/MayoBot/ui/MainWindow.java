@@ -36,6 +36,7 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        userInput.setPromptText("Type here...");
     }
 
     /** Injects the MayoBot instance */
