@@ -14,7 +14,6 @@ import java.io.IOException;
 
 /**
  * A GUI for MayoBot using FXML.
- * TODO: Implement displaying of exceptions
  */
 public class Main extends Application {
 
