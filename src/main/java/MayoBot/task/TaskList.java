@@ -3,7 +3,7 @@ package MayoBot.task;
 import java.util.ArrayList;
 
 import MayoBot.Storage;
-import MayoBot.Ui;
+import MayoBot.ui.Ui;
 
 /**
  * Manages a collection of tasks and provides operations for task manipulation.
@@ -48,20 +48,26 @@ public class TaskList {
      * Adds a new task to the list and saves it to storage.
      * Appends the task to the end of the task list and immediately saves
      * it to persistent storage. Displays confirmation messages to the user
-     * including the added task and updated task count.
+     * including the added task and updated task count using the Ui class.
      * <p>
      * This method is used for adding new tasks during interactive use and
      * provides immediate feedback and persistence. The task is added to
      * storage incrementally without affecting existing tasks.
      *
      * @param task the task to add to the list and save to storage
+     * @param ui
      */
-    public void addTask(Task task) {
+    public String addTask(Task task, Ui ui, boolean isGui) {
         tasks.add(task);
         storage.saveTask(task);
-        System.out.println("\tGot it. I've added this task:");
-        System.out.println("\t\t" + task);
-        System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
+        StringBuilder result = new StringBuilder();
+        result.append("Got it. I've added this task:\n");
+        result.append("\t" + task + "\n");
+        result.append("Now you have " + tasks.size() + " task(s) in the list.");
+        if (!isGui) {
+            ui.showMessage(result.toString());
+        }
+        return result.toString();
     }
 
     /**
@@ -106,14 +112,20 @@ public class TaskList {
      * task list is saved to maintain consistency in storage.
      *
      * @param index the one-based index of the task to remove
+     * @param ui
      * @throws IndexOutOfBoundsException if the index is out of range
      */
-    public void deleteTask(int index) {
+    public String deleteTask(int index, Ui ui, boolean isGui) {
         Task deletedTask = tasks.remove(index - 1);
         storage.saveTasks(this);
-        System.out.println("\tNoted. I've removed this task:");
-        System.out.println("\t\t" + deletedTask);
-        System.out.println("\tNow you have " + tasks.size() + " task(s) in the list.");
+        StringBuilder result = new StringBuilder();
+        result.append("Noted. I've removed this task:\n");
+        result.append("\t" + deletedTask + "\n");
+        result.append("Now you have " + tasks.size() + " task(s) in the list.");
+        if (!isGui) {
+            ui.showMessage(result.toString());
+        }
+        return result.toString();
     }
 
     /**
@@ -132,6 +144,10 @@ public class TaskList {
         ui.showMessage(tasks.get(index - 1).toString());
     }
 
+    public String getTaskForGui(int index) {
+        return tasks.get(index - 1).toString();
+    }
+
     /**
      * Displays all tasks in the list with numbered formatting.
      * Prints each task with its position number and content to the console.
@@ -146,6 +162,15 @@ public class TaskList {
             Task task = tasks.get(i);
             ui.showMessage((i + 1) + ". " + task);
         }
+    }
+
+    public String getTasksForGui() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            Task task = tasks.get(i);
+            sb.append((i + 1) + ". " + task.toString() + "\n");
+        }
+        return sb.toString();
     }
 
     /**

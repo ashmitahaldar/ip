@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import MayoBot.exceptions.MayoBotException;
 import MayoBot.task.TaskList;
+import MayoBot.ui.Ui;
 
 /**
  * Main application class that orchestrates the MayoBot task management system.
@@ -21,6 +22,7 @@ public class MayoBot {
     private Ui ui;
     private Storage storage;
     private TaskList taskList;
+    private Command lastCommand;
 
     /**
      * Creates a new MayoBot instance with the specified file path for task storage.
@@ -59,7 +61,7 @@ public class MayoBot {
                 String input = ui.readCommand();
                 Command commandInput = Parser.parse(input);
                 ui.showLine();
-                commandInput.execute(ui, taskList);
+                commandInput.execute(ui, taskList, false);
                 isExit = commandInput.isExit();
             } catch (MayoBotException e) {
                 ui.showError(e.getMessage());
@@ -71,21 +73,23 @@ public class MayoBot {
         ui.showGoodbye();
     }
 
-    /**
-     * Application entry point that creates and runs a MayoBot instance.
-     * Creates a new MayoBot with the default task storage file path and
-     * immediately starts the application loop. This method serves as the
-     * standard entry point for running the application from the command line.
-     * <p>
-     * The default file path "./data/tasks.txt" is used for task persistence,
-     * which will be created automatically if it doesn't exist.
-     *
-     * @param args command line arguments (currently unused)
-     */
-    public static void main(String[] args) {
-        new MayoBot("./data/tasks.txt").run();
+    public String getResponse(String input) {
+        try {
+            Command commandInput = Parser.parse(input);
+            lastCommand = commandInput;
+            return commandInput.execute(ui, taskList, true);
+        } catch (MayoBotException e) {
+            return e.getMessage();
+        }
     }
 
+    public String getWelcome() {
+        return ui.getWelcome();
+    }
+
+    public boolean isExit() {
+        return lastCommand != null && lastCommand.isExit();
+    }
 
     /**
      * Returns a TaskList after loading it from storage or a new empty list on failure.

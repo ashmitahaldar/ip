@@ -15,6 +15,7 @@ import MayoBot.task.EventTask;
 import MayoBot.task.Task;
 import MayoBot.task.TaskList;
 import MayoBot.task.TodoTask;
+import MayoBot.ui.Ui;
 
 /**
  * Represents a user command with its arguments and provides execution logic.
@@ -101,14 +102,21 @@ public class Command {
      * @see Ui
      * @see TaskList
      */
-    public void execute(Ui ui, TaskList taskList) throws MayoBotException {
+    public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         boolean success;
+        StringBuilder result = new StringBuilder();
         String command = this.getCommand();
         String arguments = this.getArguments();
         switch (command) {
         case "list":
-            ui.showMessage("Here are the tasks in your list:");
-            taskList.printTasks(ui);
+            if (isGui) {
+                result.append("Here are the tasks in your list:");
+                result.append("\n");
+                result.append(taskList.getTasksForGui());
+            } else {
+                ui.showMessage("Here are the tasks in your list:");
+                taskList.printTasks(ui);
+            }
             break;
         case "bye":
             this.isExit = true;
@@ -121,10 +129,20 @@ public class Command {
                 int markIndex = Integer.parseInt(arguments);
                 success = taskList.markTaskAsDone(markIndex);
                 if (success) {
-                    ui.showMessage("Nice! I've marked this task as done:");
-                    taskList.printTask(markIndex, ui);
+                    if (isGui) {
+                        result.append("Nice! I've marked this task as done:");
+                        result.append("\n");
+                        result.append(taskList.getTaskForGui(markIndex));
+                    } else {
+                        ui.showMessage("Nice! I've marked this task as done:");
+                        taskList.printTask(markIndex, ui);
+                    }
                 } else {
-                    ui.showMessage("Sorry, I was not able to mark the specified task as done.");
+                    if (isGui) {
+                        result.append("Sorry, I was not able to mark the specified task as done.");
+                    } else {
+                        ui.showMessage("Sorry, I was not able to mark the specified task as done.");
+                    }
                 }
             } catch (NumberFormatException e) {
                 throw new MarkException();
@@ -138,10 +156,20 @@ public class Command {
                 int unmarkIndex = Integer.parseInt(arguments);
                 success = taskList.markTaskAsNotDone(unmarkIndex);
                 if (success) {
-                    ui.showMessage("OK, I've marked this task as not done yet:");
-                    taskList.printTask(unmarkIndex, ui);
+                    if (isGui) {
+                        result.append("OK, I've marked this task as not done yet:");
+                        result.append("\n");
+                        result.append(taskList.getTaskForGui(unmarkIndex));
+                    } else {
+                        ui.showMessage("OK, I've marked this task as not done yet:");
+                        taskList.printTask(unmarkIndex, ui);
+                    }
                 } else {
-                    ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
+                    if (isGui) {
+                        result.append("Sorry, I was not able to mark the specified task as not done yet.");
+                    } else {
+                        ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
+                    }
                 }
             } catch (NumberFormatException e) {
                 throw new UnmarkException();
@@ -153,7 +181,12 @@ public class Command {
             }
             try {
                 int deleteIndex = Integer.parseInt(arguments);
-                taskList.deleteTask(deleteIndex);
+                String deleteTaskMessage = taskList.deleteTask(deleteIndex, ui, isGui);
+                if (isGui) {
+                    result.append(deleteTaskMessage);
+                } else {
+                    ui.showMessage(deleteTaskMessage);
+                }
             } catch (NumberFormatException e) {
                 throw new MarkException();
             } catch (IndexOutOfBoundsException e) {
@@ -165,7 +198,12 @@ public class Command {
                 throw new TodoException();
             }
             Task newTodoTask = new TodoTask(arguments);
-            taskList.addTask(newTodoTask);
+            String addTodoTaskMessage = taskList.addTask(newTodoTask, ui, isGui);
+            if (isGui) {
+                result.append(addTodoTaskMessage);
+            } else {
+                ui.showMessage(addTodoTaskMessage);
+            }
             break;
         case "deadline":
             String[] deadlineParts = arguments.split(" /by", 2);
@@ -178,7 +216,12 @@ public class Command {
             String by = deadlineParts[1];
             try {
                 Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
-                taskList.addTask(newDeadlineTask);
+                String addDeadlineTaskMessage = taskList.addTask(newDeadlineTask, ui, isGui);
+                if (isGui) {
+                    result.append(addDeadlineTaskMessage);
+                } else {
+                    ui.showMessage(addDeadlineTaskMessage);
+                }
             } catch (IllegalArgumentException e) {
                 throw new MayoBotException("Date format error: " + e.getMessage());
             }
@@ -198,24 +241,45 @@ public class Command {
             String eventTo = toSplit[1];
             try {
                 Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
-                taskList.addTask(newEventTask);
+                String addEventTaskMessage = taskList.addTask(newEventTask, ui, isGui);
+                if (isGui) {
+                    result.append(addEventTaskMessage);
+                } else {
+                    ui.showMessage(addEventTaskMessage);
+                }
             } catch (IllegalArgumentException e) {
                 throw new MayoBotException("Date format error: " + e.getMessage());
             }
             break;
         case "find":
             if (arguments.trim().isEmpty()) {
-                ui.showMessage("Please specify a search term.");
+                if (isGui) {
+                    result.append("Please specify a search term.");
+                } else {
+                    ui.showMessage("Please specify a search term.");
+                }
             } else {
                 ArrayList<Object[]> matchingTasks = taskList.findTask(arguments.trim());
                 if (matchingTasks.isEmpty()) {
-                    ui.showMessage("No matching tasks found.");
+                    if (isGui) {
+                        result.append("No matching tasks found.");
+                    } else {
+                        ui.showMessage("No matching tasks found.");
+                    }
                 } else {
-                    ui.showMessage("Here are the matching tasks in your list:");
-                    for (Object[] result : matchingTasks) {
-                        int index = (Integer) result[0];
-                        Task task = (Task) result[1];
-                        ui.showMessage(index + ". " + task);
+                    if (isGui) {
+                        result.append("Here are the matching tasks in your list:\n");
+                    } else {
+                        ui.showMessage("Here are the matching tasks in your list:");
+                    }
+                    for (Object[] matchingTask : matchingTasks) {
+                        int index = (Integer) matchingTask[0];
+                        Task task = (Task) matchingTask[1];
+                        if (isGui) {
+                            result.append(index + ". " + task + "\n");
+                        } else {
+                            ui.showMessage(index + ". " + task);
+                        }
                     }
                 }
             }
@@ -223,5 +287,6 @@ public class Command {
         default:
             throw new UnknownCommandException(command);
         }
+        return result.toString();
     }
 }
