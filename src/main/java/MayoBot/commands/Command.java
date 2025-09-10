@@ -1,4 +1,4 @@
-package MayoBot;
+package commands;
 
 import java.util.ArrayList;
 
@@ -107,15 +107,15 @@ public class Command {
         String command = this.getCommand();
         String arguments = this.getArguments();
         switch (command) {
-        case "list":
-            if (isGui) {
-                return buildResponse("Here are the tasks in your list:\n"
-                                + taskList.getTasksForGui());
-            } else {
-                ui.showMessage("Here are the tasks in your list:");
-                taskList.printTasks(ui);
-            }
-            break;
+//        case "list":
+//            if (isGui) {
+//                return buildResponse("Here are the tasks in your list:\n"
+//                                + taskList.getTasksForGui());
+//            } else {
+//                ui.showMessage("Here are the tasks in your list:");
+//                taskList.printTasks(ui);
+//            }
+//            break;
         case "bye":
             this.isExit = true;
             break;
@@ -290,7 +290,7 @@ public class Command {
         return null;
     }
 
-    private String buildResponse(String... parts) {
+    protected String buildResponse(String... parts) {
         StringBuilder result = new StringBuilder();
         for (String part : parts) {
             result.append(part);
