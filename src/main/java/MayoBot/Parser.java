@@ -11,7 +11,6 @@ import MayoBot.commands.MarkCommand;
 import MayoBot.commands.TodoCommand;
 import MayoBot.commands.UnknownCommand;
 import MayoBot.commands.UnmarkCommand;
-import MayoBot.exceptions.UnknownCommandException;
 import MayoBot.task.DeadlineTask;
 import MayoBot.task.EventTask;
 import MayoBot.task.Task;
@@ -31,6 +30,10 @@ import MayoBot.commands.ListCommand;
 public class Parser {
     /** Date and time formatter for parsing date strings in DD-MM-YYYY HH:mm format. */
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+    private static final int MIN_TASK_PARTS = 3;
+    private static final int DEADLINE_PARTS = 4;
+    private static final int EVENT_PARTS = 5;
 
     /**
      * Returns a Command object by parsing user input string containing the command type and arguments.
@@ -64,37 +67,16 @@ public class Parser {
      * @see EventTask
      */
     public static Task parseTaskFromFile(String input) {
-        String[] parts = input.split(" \\| ");
-        if (parts.length < 3) {
+        String[] parts = validateAndSplitInput(input);
+        if (parts == null) {
             return null;
         }
 
         String type = parts[0];
-        boolean isDone = parts[1].equals("1");
+        boolean isDone = parseDoneStatus(parts[1]);
         String description = parts[2];
 
-        Task task = null;
-        switch (type) {
-        case "T":
-            task = new TodoTask(description);
-            break;
-        case "D":
-            if (parts.length >= 4) {
-                LocalDateTime by = LocalDateTime.parse(parts[3]);
-                task = new DeadlineTask(description, by);
-            }
-            break;
-        case "E":
-            if (parts.length >= 5) {
-                LocalDateTime from = LocalDateTime.parse(parts[3]);
-                LocalDateTime to = LocalDateTime.parse(parts[4]);
-                task = new EventTask(description, from, to);
-            }
-            break;
-        default:
-            return null;
-        }
-
+        Task task = createTaskByType(type, description, parts);
         if (task != null && isDone) {
             task.markAsDone();
         }
@@ -123,6 +105,53 @@ public class Parser {
             return new EventCommand(arguments);
         default:
             return new UnknownCommand(command, arguments);
+        }
+    }
+
+    private static String[] validateAndSplitInput(String input) {
+        String[] parts = input.split(" \\| ");
+        return parts.length >= MIN_TASK_PARTS ? parts : null;
+    }
+
+    private static boolean parseDoneStatus(String status) {
+        return "1".equals(status);
+    }
+
+    private static Task createTaskByType(String type, String description, String[] parts) {
+        switch (type) {
+        case "T":
+            return new TodoTask(description);
+        case "D":
+            return createDeadlineTask(description, parts);
+        case "E":
+            return createEventTask(description, parts);
+        default:
+            return null;
+        }
+    }
+
+    private static Task createDeadlineTask(String description, String[] parts) {
+        if (parts.length < DEADLINE_PARTS) {
+            return null;
+        }
+        try {
+            LocalDateTime by = LocalDateTime.parse(parts[3]);
+            return new DeadlineTask(description, by);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static Task createEventTask(String description, String[] parts) {
+        if (parts.length < EVENT_PARTS) {
+            return null;
+        }
+        try {
+            LocalDateTime from = LocalDateTime.parse(parts[3]);
+            LocalDateTime to = LocalDateTime.parse(parts[4]);
+            return new EventTask(description, from, to);
+        } catch (Exception e) {
+            return null;
         }
     }
 }
