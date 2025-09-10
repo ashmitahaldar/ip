@@ -1,7 +1,32 @@
-package commands;
+package MayoBot.commands;
+
+import MayoBot.exceptions.DeleteException;
+import MayoBot.exceptions.MarkException;
+import MayoBot.exceptions.MayoBotException;
+import MayoBot.task.TaskList;
+import MayoBot.ui.Ui;
 
 public class DeleteCommand extends Command {
     public DeleteCommand(String arguments) {
         super("delete", arguments);
+    }
+
+    public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
+        String arguments = this.getArguments();
+        if (arguments.trim().isEmpty()) {
+            throw new DeleteException();
+        }
+        try {
+            int deleteIndex = Integer.parseInt(arguments);
+            String deleteTaskMessage = taskList.deleteTask(deleteIndex, ui, isGui);
+            if (!isGui) {
+                ui.showMessage(deleteTaskMessage);
+            }
+            return buildResponse(deleteTaskMessage);
+        } catch (NumberFormatException e) {
+            throw new MarkException();
+        } catch (IndexOutOfBoundsException e) {
+            throw new DeleteException();
+        }
     }
 }

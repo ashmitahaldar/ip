@@ -5,6 +5,7 @@ import java.io.IOException;
 import MayoBot.exceptions.MayoBotException;
 import MayoBot.task.TaskList;
 import MayoBot.ui.Ui;
+import MayoBot.commands.Command;
 
 /**
  * Main application class that orchestrates the MayoBot task management system.

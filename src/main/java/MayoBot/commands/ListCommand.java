@@ -1,4 +1,4 @@
-package commands;
+package MayoBot.commands;
 
 import MayoBot.exceptions.MayoBotException;
 import MayoBot.task.TaskList;
@@ -12,8 +12,7 @@ public class ListCommand extends Command {
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         if (isGui) {
-            return super.buildResponse("Here are the tasks in your list:\n"
-                    + taskList.getTasksForGui());
+            return super.buildResponse("Here are the tasks in your list:\n" + taskList.getTasksForGui());
         } else {
             ui.showMessage("Here are the tasks in your list:");
             taskList.printTasks(ui);

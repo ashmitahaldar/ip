@@ -3,10 +3,22 @@ package MayoBot;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import MayoBot.commands.DeadlineCommand;
+import MayoBot.commands.DeleteCommand;
+import MayoBot.commands.EventCommand;
+import MayoBot.commands.FindCommand;
+import MayoBot.commands.MarkCommand;
+import MayoBot.commands.TodoCommand;
+import MayoBot.commands.UnknownCommand;
+import MayoBot.commands.UnmarkCommand;
+import MayoBot.exceptions.UnknownCommandException;
 import MayoBot.task.DeadlineTask;
 import MayoBot.task.EventTask;
 import MayoBot.task.Task;
 import MayoBot.task.TodoTask;
+import MayoBot.commands.ByeCommand;
+import MayoBot.commands.Command;
+import MayoBot.commands.ListCommand;
 
 /**
  * Utility class for parsing user input and file data into Command and Task objects.
@@ -33,7 +45,7 @@ public class Parser {
         String[] parts = input.split(" ", 2);
         String command = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
-        return new Command(command, arguments);
+        return constructCommand(command, arguments);
     }
 
     /**
@@ -87,5 +99,30 @@ public class Parser {
             task.markAsDone();
         }
         return task;
+    }
+
+    private static Command constructCommand(String command, String arguments) {
+        switch (command) {
+        case "list":
+            return new ListCommand(arguments);
+        case "bye":
+            return new ByeCommand(arguments);
+        case "mark":
+            return new MarkCommand(arguments);
+        case "unmark":
+            return new UnmarkCommand(arguments);
+        case "delete":
+            return new DeleteCommand(arguments);
+        case "find":
+            return new FindCommand(arguments);
+        case "todo":
+            return new TodoCommand(arguments);
+        case "deadline":
+            return new DeadlineCommand(arguments);
+        case "event":
+            return new EventCommand(arguments);
+        default:
+            return new UnknownCommand(command, arguments);
+        }
     }
 }

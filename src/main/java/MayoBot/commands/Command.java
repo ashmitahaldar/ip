@@ -1,4 +1,4 @@
-package commands;
+package MayoBot.commands;
 
 import java.util.ArrayList;
 
@@ -26,10 +26,10 @@ import MayoBot.ui.Ui;
  * word and any associated arguments. The execute method dispatches to appropriate
  * handlers based on the command type and manages the application's exit state.
  */
-public class Command {
+public abstract class Command {
     private String command;
     private String arguments;
-    private boolean isExit;
+    protected boolean isExit;
 
     /**
      * Creates a new Command with the specified command word and arguments.
@@ -102,193 +102,7 @@ public class Command {
      * @see Ui
      * @see TaskList
      */
-    public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
-        boolean success;
-        String command = this.getCommand();
-        String arguments = this.getArguments();
-        switch (command) {
-//        case "list":
-//            if (isGui) {
-//                return buildResponse("Here are the tasks in your list:\n"
-//                                + taskList.getTasksForGui());
-//            } else {
-//                ui.showMessage("Here are the tasks in your list:");
-//                taskList.printTasks(ui);
-//            }
-//            break;
-        case "bye":
-            this.isExit = true;
-            break;
-        case "mark":
-            if (arguments.trim().isEmpty()) {
-                throw new MarkException();
-            }
-            try {
-                int markIndex = Integer.parseInt(arguments);
-                success = taskList.markTaskAsDone(markIndex);
-                if (success) {
-                    if (isGui) {
-                        return buildResponse(
-                                "Nice! I've marked this task as done:\n"
-                                + taskList.getTaskForGui(markIndex));
-                    } else {
-                        ui.showMessage("Nice! I've marked this task as done:");
-                        taskList.printTask(markIndex, ui);
-                    }
-                } else {
-                    if (isGui) {
-                        return buildResponse("Sorry, I was not able to mark the specified task as done.");
-                    } else {
-                        ui.showMessage("Sorry, I was not able to mark the specified task as done.");
-                    }
-                }
-            } catch (NumberFormatException e) {
-                throw new MarkException();
-            }
-            break;
-        case "unmark":
-            if (arguments.trim().isEmpty()) {
-                throw new UnmarkException();
-            }
-            try {
-                int unmarkIndex = Integer.parseInt(arguments);
-                success = taskList.markTaskAsNotDone(unmarkIndex);
-                if (success) {
-                    if (isGui) {
-                        return buildResponse(
-                                "OK, I've marked this task as not done yet:\n"
-                                + taskList.getTaskForGui(unmarkIndex));
-                    } else {
-                        ui.showMessage("OK, I've marked this task as not done yet:");
-                        taskList.printTask(unmarkIndex, ui);
-                    }
-                } else {
-                    if (isGui) {
-                        return buildResponse("Sorry, I was not able to mark the specified task as not done yet.");
-                    } else {
-                        ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
-                    }
-                }
-            } catch (NumberFormatException e) {
-                throw new UnmarkException();
-            }
-            break;
-        case "delete":
-            if (arguments.trim().isEmpty()) {
-                throw new DeleteException();
-            }
-            try {
-                int deleteIndex = Integer.parseInt(arguments);
-                String deleteTaskMessage = taskList.deleteTask(deleteIndex, ui, isGui);
-                if (isGui) {
-                    return buildResponse(deleteTaskMessage);
-                } else {
-                    ui.showMessage(deleteTaskMessage);
-                }
-            } catch (NumberFormatException e) {
-                throw new MarkException();
-            } catch (IndexOutOfBoundsException e) {
-                throw new DeleteException();
-            }
-            break;
-        case "todo":
-            if (arguments.trim().isEmpty()) {
-                throw new TodoException();
-            }
-            Task newTodoTask = new TodoTask(arguments);
-            String addTodoTaskMessage = taskList.addTask(newTodoTask, ui, isGui);
-            if (isGui) {
-                return buildResponse(addTodoTaskMessage);
-            } else {
-                ui.showMessage(addTodoTaskMessage);
-            }
-            break;
-        case "deadline":
-            String[] deadlineParts = arguments.split(" /by", 2);
-            if (deadlineParts[0].trim().isEmpty()
-                    || deadlineParts.length < 2
-                    || deadlineParts[1].trim().isEmpty()) {
-                throw new DeadlineException();
-            }
-            String deadlineDescription = deadlineParts[0];
-            String by = deadlineParts[1];
-            try {
-                Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
-                String addDeadlineTaskMessage = taskList.addTask(newDeadlineTask, ui, isGui);
-                if (isGui) {
-                    return buildResponse(addDeadlineTaskMessage);
-                } else {
-                    ui.showMessage(addDeadlineTaskMessage);
-                }
-            } catch (IllegalArgumentException e) {
-                throw new MayoBotException("Date format error: " + e.getMessage());
-            }
-            break;
-        case "event":
-            String[] fromSplit = arguments.split(" /from", 2);
-            if (fromSplit[0].trim().isEmpty() || fromSplit.length < 2) {
-                throw new EventException();
-            }
-            String eventDescription = fromSplit[0];
-            String fromAndTo = fromSplit[1];
-            String[] toSplit = fromAndTo.split("/to", 2);
-            if (toSplit[0].trim().isEmpty() || toSplit.length < 2 || toSplit[1].trim().isEmpty()) {
-                throw new EventException();
-            }
-            String eventFrom = toSplit[0];
-            String eventTo = toSplit[1];
-            try {
-                Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
-                String addEventTaskMessage = taskList.addTask(newEventTask, ui, isGui);
-                if (isGui) {
-                    return buildResponse(addEventTaskMessage);
-                } else {
-                    ui.showMessage(addEventTaskMessage);
-                }
-            } catch (IllegalArgumentException e) {
-                throw new MayoBotException("Date format error: " + e.getMessage());
-            }
-            break;
-        case "find":
-            if (arguments.trim().isEmpty()) {
-                if (isGui) {
-                    return buildResponse("Please specify a search term.");
-                } else {
-                    ui.showMessage("Please specify a search term.");
-                }
-            } else {
-                ArrayList<Object[]> matchingTasks = taskList.findTask(arguments.trim());
-                if (matchingTasks.isEmpty()) {
-                    if (isGui) {
-                        return buildResponse("No matching tasks found.");
-                    } else {
-                        ui.showMessage("No matching tasks found.");
-                    }
-                } else {
-                    StringBuilder response = new StringBuilder();
-                    if (isGui) {
-                        response.append("Here are the matching tasks in your list:\n");
-                    } else {
-                        ui.showMessage("Here are the matching tasks in your list:");
-                    }
-                    for (Object[] matchingTask : matchingTasks) {
-                        int index = (Integer) matchingTask[0];
-                        Task task = (Task) matchingTask[1];
-                        if (isGui) {
-                            response.append(index + ". " + task + "\n");
-                        } else {
-                            ui.showMessage(index + ". " + task);
-                        }
-                    }
-                    return buildResponse(response.toString());
-                }
-            }
-            break;
-        default:
-            throw new UnknownCommandException(command);
-        }
-        return null;
-    }
+    public abstract String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException;
 
     protected String buildResponse(String... parts) {
         StringBuilder result = new StringBuilder();

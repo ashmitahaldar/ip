@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import MayoBot.commands.Command;
 import org.junit.jupiter.api.Test;
 
 import MayoBot.task.DeadlineTask;
