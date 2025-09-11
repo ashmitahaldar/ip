@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import mayobot.commands.ByeCommand;
+import mayobot.commands.MarkCommand;
 import mayobot.ui.Ui;
 import mayobot.commands.Command;
 import org.junit.jupiter.api.AfterEach;
@@ -54,22 +56,22 @@ public class CommandTest {
     @Test
     public void command_markCommandWithValidIndex_success() throws MayoBotException {
         taskList.addTaskToList(new TodoTask("test"));
-        Command command = new Command("mark", "1");
+        Command command = new MarkCommand("1");
 
-        command.execute(ui, taskList);
+        command.execute(ui, taskList, false);
         assertTrue(taskList.getTask(0).isDone());
     }
 
     @Test
     public void command_markCommandWithEmptyArguments_exceptionThrown() {
-        Command command = new Command("mark", "");
-        assertThrows(MarkException.class, () -> command.execute(ui, taskList));
+        Command command = new MarkCommand("");
+        assertThrows(MarkException.class, () -> command.execute(ui, taskList, false));
     }
 
     @Test
     public void command_byeCommand_setsExit() throws MayoBotException {
-        Command command = new Command("bye", "");
-        command.execute(ui, taskList);
+        Command command = new ByeCommand("");
+        command.execute(ui, taskList, false);
         assertTrue(command.isExit());
     }
 }
