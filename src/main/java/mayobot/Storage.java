@@ -86,7 +86,7 @@ public class Storage {
      * stderr, but does not propagate to the caller.
      *
      * @param task the task to append to the storage file
-     * @see Task#toFileFormat()
+     * @see Task#changeToFileFormat()
      */
     public void saveTask(Task task) {
         File file = new File(filePath);
@@ -95,7 +95,7 @@ public class Storage {
             directory.mkdirs();
         }
         try (FileWriter writer = new FileWriter(file, true)) {
-            writer.write(task.toFileFormat() + "\n");
+            writer.write(task.changeToFileFormat() + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -112,7 +112,7 @@ public class Storage {
      * stderr, but does not propagate to the caller.
      *
      * @param taskList the TaskList containing all tasks to save to the file
-     * @see Task#toFileFormat()
+     * @see Task#changeToFileFormat()
      * @see TaskList
      */
     public void saveTasks(TaskList taskList) {
@@ -122,9 +122,9 @@ public class Storage {
             directory.mkdirs();
         }
         try (FileWriter writer = new FileWriter(file)) {
-            for (int i = 0; i < taskList.size(); i++) {
+            for (int i = 0; i < taskList.getSize(); i++) {
                 Task task = taskList.getTask(i);
-                writer.write(task.toFileFormat() + "\n");
+                writer.write(task.changeToFileFormat() + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();

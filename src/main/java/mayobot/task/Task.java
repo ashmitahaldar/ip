@@ -95,7 +95,7 @@ public abstract class Task {
      *
      * @return the file format string representation of this task
      */
-    public String toFileFormat() {
+    public String changeToFileFormat() {
         return (isDone ? "1" : "0") + " | " + description;
     }
 

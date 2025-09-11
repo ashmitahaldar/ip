@@ -18,6 +18,9 @@ import mayobot.ui.Ui;
  * Example: {@code deadline Submit assignment /by 2024-12-25 23:59}
  */
 public class DeadlineCommand extends Command {
+    private static final String BY_SEPARATOR = " /by";
+    private static final int EXPECTED_PARTS = 2;
+
     /**
      * Constructs a new DeadlineCommand with the specified arguments.
      *
@@ -45,25 +48,34 @@ public class DeadlineCommand extends Command {
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         String arguments = this.getArguments();
+        DeadlineTaskComponents components = parseDeadlineArguments(arguments);
 
-        String[] deadlineParts = arguments.split(" /by", 2);
-        if (deadlineParts[0].trim().isEmpty()
-                || deadlineParts.length < 2
-                || deadlineParts[1].trim().isEmpty()) {
+        try {
+            Task newDeadlineTask = new DeadlineTask(components.description, components.by);
+            return handleTaskCreation(newDeadlineTask, taskList, ui, isGui);
+        } catch (IllegalArgumentException e) {
+            // TODO: Use DeadlineException instead.
+            throw new MayoBotException(DATE_FORMAT_ERROR_PREFIX + e.getMessage());
+        }
+    }
+
+    private boolean isValidDeadlineParts(String[] parts) {
+        return parts.length == EXPECTED_PARTS
+                && !parts[0].trim().isEmpty()
+                && !parts[1].trim().isEmpty();
+    }
+
+    private DeadlineTaskComponents parseDeadlineArguments(String arguments) throws DeadlineException {
+        String[] deadlineParts = arguments.split(BY_SEPARATOR, EXPECTED_PARTS);
+        if (!isValidDeadlineParts(deadlineParts)) {
             throw new DeadlineException();
         }
+
         String deadlineDescription = deadlineParts[0];
         String by = deadlineParts[1];
 
-        try {
-            Task newDeadlineTask = new DeadlineTask(deadlineDescription, by);
-            String addDeadlineTaskMessage = taskList.addTask(newDeadlineTask, ui, isGui);
-            if (!isGui) {
-                ui.showMessage(addDeadlineTaskMessage);
-            }
-            return buildResponse(addDeadlineTaskMessage);
-        } catch (IllegalArgumentException e) {
-            throw new MayoBotException("Date format error: " + e.getMessage());
-        }
+        return new DeadlineTaskComponents(deadlineDescription, by);
     }
+
+    private record DeadlineTaskComponents(String description, String by) {}
 }

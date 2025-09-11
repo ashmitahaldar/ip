@@ -1,6 +1,7 @@
 package mayobot.commands;
 
 import mayobot.exceptions.MayoBotException;
+import mayobot.task.Task;
 import mayobot.task.TaskList;
 import mayobot.ui.Ui;
 
@@ -14,6 +15,8 @@ import mayobot.ui.Ui;
  * handlers based on the command type and manages the application's exit state.
  */
 public abstract class Command {
+    protected static final String DATE_FORMAT_ERROR_PREFIX = "Date format error: ";
+
     protected boolean isExit;
     private final String command;
     private final String arguments;
@@ -100,5 +103,13 @@ public abstract class Command {
             }
         }
         return result.toString().trim();
+    }
+
+    protected String handleTaskCreation(Task task, TaskList taskList, Ui ui, boolean isGui) {
+        String message = taskList.addTask(task, ui, isGui);
+        if (!isGui) {
+            ui.showMessage(message);
+        }
+        return buildResponse(message);
     }
 }

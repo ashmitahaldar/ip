@@ -47,6 +47,7 @@ public class DeleteCommand extends Command {
         if (arguments.trim().isEmpty()) {
             throw new DeleteException();
         }
+
         try {
             int deleteIndex = Integer.parseInt(arguments);
             String deleteTaskMessage = taskList.deleteTask(deleteIndex, ui, isGui);
@@ -54,9 +55,7 @@ public class DeleteCommand extends Command {
                 ui.showMessage(deleteTaskMessage);
             }
             return buildResponse(deleteTaskMessage);
-        } catch (NumberFormatException e) {
-            throw new DeleteException();
-        } catch (IndexOutOfBoundsException e) {
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new DeleteException();
         }
     }

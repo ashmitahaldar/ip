@@ -44,7 +44,7 @@ public class StorageTest {
     public void storage_loadTasks_createsNewFile() throws IOException {
         TaskList result = storage.loadTasks();
         assertNotNull(result);
-        assertEquals(0, result.size());
+        assertEquals(0, result.getSize());
         assertTrue(new File(TEST_FILE).exists());
     }
 

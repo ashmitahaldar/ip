@@ -36,8 +36,8 @@ public class TodoTask extends Task {
      * @return the file format string with todo task identifier
      */
     @Override
-    public String toFileFormat() {
-        return "T | " + super.toFileFormat();
+    public String changeToFileFormat() {
+        return "T | " + super.changeToFileFormat();
     }
 
     /**

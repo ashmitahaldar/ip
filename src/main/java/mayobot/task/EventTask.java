@@ -80,8 +80,8 @@ public class EventTask extends Task {
      * @return the file format string with event task identifier and time period
      */
     @Override
-    public String toFileFormat() {
-        return "E | " + super.toFileFormat()
+    public String changeToFileFormat() {
+        return "E | " + super.changeToFileFormat()
                 + " | " + from
                 + " | " + to;
     }

@@ -20,6 +20,10 @@ import mayobot.ui.Ui;
  * Example: {@code find meeting} - finds all tasks containing the word "meeting"
  */
 public class FindCommand extends Command {
+    private static final String LIST_OUTPUT_HEADER = "Here are the matching tasks in your list:";
+    private static final String MISSING_SEARCH_TERM_MESSAGE = "Please specify a search term.";
+    private static final String NO_TASK_FOUND_MESSAGE = "No matching tasks found.";
+
     /**
      * Constructs a new FindCommand with the specified search arguments.
      *
@@ -48,22 +52,22 @@ public class FindCommand extends Command {
         String arguments = this.getArguments();
         if (arguments.trim().isEmpty()) {
             if (!isGui) {
-                ui.showMessage("Please specify a search term.");
+                ui.showMessage(MISSING_SEARCH_TERM_MESSAGE);
             }
-            return buildResponse("Please specify a search term.");
+            return buildResponse(MISSING_SEARCH_TERM_MESSAGE);
         } else {
-            ArrayList<Object[]> matchingTasks = taskList.findTask(arguments.trim());
+            ArrayList<Object[]> matchingTasks = taskList.findTasks(arguments.trim());
             if (matchingTasks.isEmpty()) {
                 if (!isGui) {
-                    ui.showMessage("No matching tasks found.");
+                    ui.showMessage(NO_TASK_FOUND_MESSAGE);
                 }
-                return buildResponse("No matching tasks found.");
+                return buildResponse(NO_TASK_FOUND_MESSAGE);
             } else {
                 StringBuilder response = new StringBuilder();
                 if (!isGui) {
-                    ui.showMessage("Here are the matching tasks in your list:");
+                    ui.showMessage(LIST_OUTPUT_HEADER);
                 }
-                response.append("Here are the matching tasks in your list:\n");
+                response.append(LIST_OUTPUT_HEADER + "\n");
                 for (Object[] matchingTask : matchingTasks) {
                     int index = (Integer) matchingTask[0];
                     Task task = (Task) matchingTask[1];

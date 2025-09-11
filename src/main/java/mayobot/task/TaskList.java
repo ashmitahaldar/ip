@@ -40,7 +40,7 @@ public class TaskList {
      *
      * @return the total number of tasks in the list
      */
-    public int size() {
+    public int getSize() {
         return tasks.size();
     }
 
@@ -232,7 +232,7 @@ public class TaskList {
      * @param searchTerm the keyword to search for in task descriptions
      * @return an ArrayList containing arrays of [originalIndex, matchingTask]
      */
-    public ArrayList<Object[]> findTask(String searchTerm) {
+    public ArrayList<Object[]> findTasks(String searchTerm) {
         ArrayList<Object[]> matchingResults = new ArrayList<>();
 
         for (int i = 0; i < tasks.size(); i++) {

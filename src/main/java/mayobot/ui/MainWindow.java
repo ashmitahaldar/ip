@@ -71,6 +71,7 @@ public class MainWindow extends AnchorPane {
         dialogContainer.getChildren().add(DialogBox.getMayoBotDialog(response, mayoBotImage));
         userInput.clear();
 
+        // Check for whether the latest command was a "bye" command to exit the application
         if (mayoBot.isExit()) {
             try {
                 Thread.sleep(250); // Pauses for 250 milliseconds (0.25 second)

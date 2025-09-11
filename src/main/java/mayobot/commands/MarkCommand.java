@@ -17,6 +17,9 @@ import mayobot.ui.Ui;
  * Example: {@code mark 2} - marks the second task in the list as completed
  */
 public class MarkCommand extends Command {
+    private static final String MARK_SUCCESS_MESSAGE = "Nice! I've marked this task as done:";
+    private static final String MARK_FAILURE_MESSAGE = "Sorry, I was not able to mark the specified task as done.";
+
     /**
      * Constructs a new MarkCommand with the specified arguments.
      *
@@ -49,22 +52,21 @@ public class MarkCommand extends Command {
         if (arguments.trim().isEmpty()) {
             throw new MarkException();
         }
+
         try {
             int markIndex = Integer.parseInt(arguments);
             success = taskList.markTaskAsDone(markIndex);
             if (success) {
                 if (!isGui) {
-                    ui.showMessage("Nice! I've marked this task as done:");
+                    ui.showMessage(MARK_SUCCESS_MESSAGE);
                     taskList.printTask(markIndex, ui);
                 }
-                return buildResponse(
-                        "Nice! I've marked this task as done:\n"
-                        + taskList.getTaskForGui(markIndex));
+                return buildResponse(MARK_SUCCESS_MESSAGE + "\n" + taskList.getTaskForGui(markIndex));
             } else {
                 if (!isGui) {
-                    ui.showMessage("Sorry, I was not able to mark the specified task as done.");
+                    ui.showMessage(MARK_FAILURE_MESSAGE);
                 }
-                return buildResponse("Sorry, I was not able to mark the specified task as done.");
+                return buildResponse(MARK_FAILURE_MESSAGE);
             }
         } catch (NumberFormatException e) {
             throw new MarkException();

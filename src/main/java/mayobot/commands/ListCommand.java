@@ -17,6 +17,8 @@ import mayobot.ui.Ui;
  * of their type (todo, deadline, or event) or completion status.
  */
 public class ListCommand extends Command {
+    private static final String LIST_OUTPUT_HEADER = "Here are the tasks in your list:";
+
     /**
      * Constructs a new ListCommand with the specified arguments.
      * <p>
@@ -44,12 +46,10 @@ public class ListCommand extends Command {
      */
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
-        if (isGui) {
-            return super.buildResponse("Here are the tasks in your list:\n" + taskList.getTasksForGui());
-        } else {
-            ui.showMessage("Here are the tasks in your list:");
+        if (!isGui) {
+            ui.showMessage(LIST_OUTPUT_HEADER);
             taskList.printTasks(ui);
         }
-        return null;
+        return super.buildResponse(LIST_OUTPUT_HEADER + "\n" + taskList.getTasksForGui());
     }
 }

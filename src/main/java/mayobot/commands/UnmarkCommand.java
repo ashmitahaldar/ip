@@ -18,6 +18,10 @@ import mayobot.ui.Ui;
  * Example: {@code unmark 3} - marks the third task in the list as not completed
  */
 public class UnmarkCommand extends Command {
+    private static final String UNMARK_SUCCESS_MESSAGE = "OK, I've marked this task as not done yet:";
+    private static final String UNMARK_FAILURE_MESSAGE = "Sorry, I was not able to mark the specified task as "
+                                                        + "not done yet.";
+
     /**
      * Constructs a new UnmarkCommand with the specified arguments.
      *
@@ -50,22 +54,21 @@ public class UnmarkCommand extends Command {
         if (arguments.trim().isEmpty()) {
             throw new UnmarkException();
         }
+
         try {
             int unmarkIndex = Integer.parseInt(arguments);
             success = taskList.markTaskAsNotDone(unmarkIndex);
             if (success) {
                 if (!isGui) {
-                    ui.showMessage("OK, I've marked this task as not done yet:");
+                    ui.showMessage(UNMARK_SUCCESS_MESSAGE);
                     taskList.printTask(unmarkIndex, ui);
                 }
-                return buildResponse(
-                        "OK, I've marked this task as not done yet:\n"
-                        + taskList.getTaskForGui(unmarkIndex));
+                return buildResponse(UNMARK_SUCCESS_MESSAGE + "\n" + taskList.getTaskForGui(unmarkIndex));
             } else {
                 if (!isGui) {
-                    ui.showMessage("Sorry, I was not able to mark the specified task as not done yet.");
+                    ui.showMessage(UNMARK_FAILURE_MESSAGE);
                 }
-                return buildResponse("Sorry, I was not able to mark the specified task as not done yet.");
+                return buildResponse(UNMARK_FAILURE_MESSAGE);
             }
         } catch (NumberFormatException e) {
             throw new UnmarkException();

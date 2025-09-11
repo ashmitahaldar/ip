@@ -19,6 +19,10 @@ import mayobot.ui.Ui;
  * Example: {@code event Team meeting /from 2024-12-25 14:00 /to 2024-12-25 16:00}
  */
 public class EventCommand extends Command {
+    private static final String FROM_SEPARATOR = " /from";
+    private static final String TO_SEPARATOR = "/to";
+    private static final int EXPECTED_PARTS = 2;
+
     /**
      * Constructs a new EventCommand with the specified arguments.
      *
@@ -47,29 +51,45 @@ public class EventCommand extends Command {
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         String arguments = this.getArguments();
+        EventTaskComponents components = parseEventArguments(arguments);
 
-        String[] fromSplit = arguments.split(" /from", 2);
-        if (fromSplit[0].trim().isEmpty() || fromSplit.length < 2) {
-            throw new EventException();
+        try {
+            Task newEventTask = new EventTask(components.description, components.from, components.to);
+            return handleTaskCreation(newEventTask, taskList, ui, isGui);
+        } catch (IllegalArgumentException e) {
+            // TODO: Use EventException instead.
+            throw new MayoBotException(DATE_FORMAT_ERROR_PREFIX + e.getMessage());
         }
+    }
+
+    private EventTaskComponents parseEventArguments(String arguments) throws EventException {
+        String[] fromSplit = arguments.split(FROM_SEPARATOR, EXPECTED_PARTS);
+        validateFromSplit(fromSplit);
+
         String eventDescription = fromSplit[0];
         String fromAndTo = fromSplit[1];
-        String[] toSplit = fromAndTo.split("/to", 2);
-        if (toSplit[0].trim().isEmpty() || toSplit.length < 2 || toSplit[1].trim().isEmpty()) {
-            throw new EventException();
-        }
+
+        String[] toSplit = fromAndTo.split(TO_SEPARATOR, EXPECTED_PARTS);
+        validateFromSplit(toSplit);
+
         String eventFrom = toSplit[0];
         String eventTo = toSplit[1];
 
-        try {
-            Task newEventTask = new EventTask(eventDescription, eventFrom, eventTo);
-            String addEventTaskMessage = taskList.addTask(newEventTask, ui, isGui);
-            if (!isGui) {
-                ui.showMessage(addEventTaskMessage);
-            }
-            return buildResponse(addEventTaskMessage);
-        } catch (IllegalArgumentException e) {
-            throw new MayoBotException("Date format error: " + e.getMessage());
+        return new EventTaskComponents(eventDescription, eventFrom, eventTo);
+    }
+
+    private void validateFromSplit(String[] fromSplit) throws EventException {
+        if (fromSplit[0].trim().isEmpty() || fromSplit.length < EXPECTED_PARTS) {
+            throw new EventException();
         }
     }
+
+    private void validateToSplit(String[] toSplit) throws EventException {
+        if (toSplit[0].trim().isEmpty() || toSplit.length < EXPECTED_PARTS || toSplit[1].trim().isEmpty()) {
+            throw new EventException();
+        }
+    }
+
+    // Record for better data encapsulation
+    private record EventTaskComponents(String description, String from, String to) {}
 }

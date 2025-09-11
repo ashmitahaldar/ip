@@ -47,12 +47,8 @@ public class TodoCommand extends Command {
         if (arguments.trim().isEmpty()) {
             throw new TodoException();
         }
+
         Task newTodoTask = new TodoTask(arguments);
-        String addTodoTaskMessage = taskList.addTask(newTodoTask, ui, isGui);
-        if (!isGui) {
-            ui.showMessage(addTodoTaskMessage);
-            return null;
-        }
-        return buildResponse(addTodoTaskMessage);
+        return handleTaskCreation(newTodoTask, taskList, ui, isGui);
     }
 }

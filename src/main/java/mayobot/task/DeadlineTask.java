@@ -75,8 +75,8 @@ public class DeadlineTask extends Task {
      * @return the file format string with deadline task identifier and deadline
      */
     @Override
-    public String toFileFormat() {
-        return "D | " + super.toFileFormat() + " | " + by;
+    public String changeToFileFormat() {
+        return "D | " + super.changeToFileFormat() + " | " + by;
     }
 
     /**
