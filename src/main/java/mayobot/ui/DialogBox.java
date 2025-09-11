@@ -23,6 +23,15 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Constructs a new DialogBox with the specified text and image.
+     * This constructor loads the FXML layout for the dialog box, sets itself as both
+     * the controller and root, and initializes the dialog text and display picture.
+     *
+     * @param text the text content to display in the dialog box
+     * @param img the image to display as the speaker's profile picture
+     * @throws RuntimeException if the FXML file cannot be loaded (wraps IOException)
+     */
     public DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));

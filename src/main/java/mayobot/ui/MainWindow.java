@@ -33,6 +33,20 @@ public class MainWindow extends AnchorPane {
             1000,
             1000);
 
+    /**
+     * Initializes the main window components after FXML loading is complete.
+     *
+     * This method is automatically called by JavaFX after the FXML file has been loaded.
+     * It configures the scroll pane to automatically scroll to the bottom when new content
+     * is added to the dialog container, and sets up the user input field with a placeholder prompt.
+     *
+     * Specifically, this method:
+     * <ul>
+     *   <li>Binds the scroll pane's vertical value to the dialog container's height property
+     *       to enable auto-scrolling to the latest messages</li>
+     *   <li>Sets a prompt text for the user input field to guide user interaction</li>
+     * </ul>
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
