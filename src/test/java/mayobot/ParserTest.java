@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import mayobot.commands.Command;
 import org.junit.jupiter.api.Test;
 
+import mayobot.commands.Command;
 import mayobot.task.DeadlineTask;
 import mayobot.task.EventTask;
 import mayobot.task.Task;

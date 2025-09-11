@@ -10,18 +10,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import mayobot.commands.ByeCommand;
-import mayobot.commands.MarkCommand;
-import mayobot.ui.Ui;
-import mayobot.commands.Command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import mayobot.commands.ByeCommand;
+import mayobot.commands.Command;
+import mayobot.commands.MarkCommand;
 import mayobot.exceptions.MarkException;
 import mayobot.exceptions.MayoBotException;
 import mayobot.task.TaskList;
 import mayobot.task.TodoTask;
+import mayobot.ui.Ui;
 
 public class CommandTest {
     private static final String TEST_FILE = "./test_data/command_test.txt";
