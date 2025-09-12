@@ -32,6 +32,9 @@ public class EventException extends MayoBotException {
     public EventException() {
         super(COMMAND_TYPE, DEFAULT_HELP);
     }
+    private EventException(String message) {
+        super(message);
+    }
 
     public static EventException missingFromKeyword() {
         return new EventException("Missing '/from' keyword in event command");
@@ -43,9 +46,5 @@ public class EventException extends MayoBotException {
 
     public static EventException dateParsingError(String details) {
         return new EventException("Date format error: " + details);
-    }
-
-    private EventException(String message) {
-        super(message);
     }
 }

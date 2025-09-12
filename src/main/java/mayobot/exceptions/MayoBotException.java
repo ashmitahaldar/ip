@@ -29,6 +29,20 @@ public class MayoBotException extends Exception {
         super(ERROR_PREFIX + message);
     }
 
+    /**
+     * Constructs a new MayoBotException with a formatted error message for command-specific errors.
+     * <p>
+     * This constructor is specifically designed for command parsing and validation errors.
+     * It creates a standardized error message that indicates the input format is incorrect
+     * for a specific command type, followed by additional guidance provided in the default message.
+     * <p>
+     * This constructor is particularly useful for command classes that need to provide
+     * specific feedback about formatting requirements while maintaining consistent error
+     * message structure across different command types.
+     *
+     * @param commandType the name of the command that had incorrect input format (e.g., "todo", "deadline", "event")
+     * @param defaultMessage additional guidance or specific formatting requirements for the command
+     */
     public MayoBotException(String commandType, String defaultMessage) {
         super(ERROR_PREFIX + String.format("Input is not the correct format for the \"%s\" command. %s",
                 commandType, defaultMessage));

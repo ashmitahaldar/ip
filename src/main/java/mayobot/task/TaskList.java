@@ -1,6 +1,8 @@
 package mayobot.task;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import mayobot.Storage;
 import mayobot.ui.Ui;
@@ -60,8 +62,8 @@ public class TaskList {
     public String addTask(Task task, Ui ui, boolean isGui) {
         assert task != null : "Cannot add null task";
         assert ui != null : "UI cannot be null";
-        assert task.getDescription() != null && !task.getDescription().trim().isEmpty() :
-                "Task description cannot be null or empty";
+        assert task.getDescription() != null && !task.getDescription().trim().isEmpty()
+                : "Task description cannot be null or empty";
 
         tasks.add(task);
         storage.saveTask(task);
@@ -259,15 +261,9 @@ public class TaskList {
         assert searchTerm != null : "Search term cannot be null";
         assert !searchTerm.trim().isEmpty() : "Search term cannot be empty";
 
-        ArrayList<Object[]> matchingResults = new ArrayList<>();
-
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            if (task.getDescription().toLowerCase().contains(searchTerm.toLowerCase())) {
-                matchingResults.add(new Object[]{i + 1, task}); // Store 1-based index and task
-            }
-        }
-
-        return matchingResults;
+        return IntStream.range(0, tasks.size())
+                .filter(i -> tasks.get(i).getDescription().toLowerCase().contains(searchTerm.toLowerCase()))
+                .mapToObj(i -> new Object[]{i + 1, tasks.get(i)})
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

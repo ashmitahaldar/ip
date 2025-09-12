@@ -32,11 +32,11 @@ public class DeadlineException extends MayoBotException {
         super(COMMAND_TYPE, DEFAULT_HELP);
     }
 
-    public static DeadlineException dateParsingError(String dateString) {
-        return new DeadlineException(DATE_ERROR_PREFIX + "Unable to parse date '" + dateString + "'");
-    }
-
     private DeadlineException(String message) {
         super(message);
+    }
+
+    public static DeadlineException dateParsingError(String dateString) {
+        return new DeadlineException(DATE_ERROR_PREFIX + "Unable to parse date '" + dateString + "'");
     }
 }

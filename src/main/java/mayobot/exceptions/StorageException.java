@@ -36,15 +36,15 @@ public class StorageException extends MayoBotException {
         super(DEFAULT_MESSAGE);
     }
 
+    private StorageException(String message) {
+        super(message);
+    }
+
     public static StorageException readError(String details) {
         return new StorageException("Unable to read from tasks.txt: " + details);
     }
 
     public static StorageException writeError(String details) {
         return new StorageException("Unable to write to tasks.txt: " + details);
-    }
-
-    private StorageException(String message) {
-        super(message);
     }
 }
