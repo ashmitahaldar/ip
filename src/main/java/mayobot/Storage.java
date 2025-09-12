@@ -50,7 +50,10 @@ public class Storage {
      */
     public TaskList loadTasks() throws IOException {
         TaskList taskList = new TaskList(this);
+        assert taskList != null : "TaskList should be created successfully";
+
         File file = new File(filePath);
+        assert file != null : "File object should be created";
 
         File directory = file.getParentFile();
         if (!directory.exists()) {
@@ -62,6 +65,9 @@ public class Storage {
             System.out.println("\tTasks file created.\n");
             return taskList;
         }
+
+        assert file.exists() : "File should exist before reading";
+        assert file.canRead() : "File should be readable";
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -89,11 +95,16 @@ public class Storage {
      * @see Task#changeToFileFormat()
      */
     public void saveTask(Task task) {
+        assert task != null : "Cannot save null task";
+        assert task.getDescription() != null : "Task description cannot be null";
+
         File file = new File(filePath);
         File directory = file.getParentFile();
+
         if (!directory.exists()) {
             directory.mkdirs();
         }
+
         try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(task.changeToFileFormat() + "\n");
         } catch (IOException e) {
@@ -116,11 +127,15 @@ public class Storage {
      * @see TaskList
      */
     public void saveTasks(TaskList taskList) {
+        assert taskList != null : "Cannot save null TaskList";
+
         File file = new File(filePath);
         File directory = file.getParentFile();
+
         if (!directory.exists()) {
             directory.mkdirs();
         }
+
         try (FileWriter writer = new FileWriter(file)) {
             for (int i = 0; i < taskList.getSize(); i++) {
                 Task task = taskList.getTask(i);
