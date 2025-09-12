@@ -1,6 +1,8 @@
 package MayoBot.task;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import MayoBot.Storage;
 import MayoBot.ui.Ui;
@@ -233,15 +235,9 @@ public class TaskList {
      * @return an ArrayList containing arrays of [originalIndex, matchingTask]
      */
     public ArrayList<Object[]> findTask(String searchTerm) {
-        ArrayList<Object[]> matchingResults = new ArrayList<>();
-
-        for (int i = 0; i < tasks.size(); i++) {
-            Task task = tasks.get(i);
-            if (task.getDescription().toLowerCase().contains(searchTerm.toLowerCase())) {
-                matchingResults.add(new Object[]{i + 1, task}); // Store 1-based index and task
-            }
-        }
-
-        return matchingResults;
+        return IntStream.range(0, tasks.size())
+                .filter(i -> tasks.get(i).getDescription().toLowerCase().contains(searchTerm.toLowerCase()))
+                .mapToObj(i -> new Object[]{i + 1, tasks.get(i)})
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }
