@@ -80,8 +80,8 @@ public class Parser {
         String description = parts[2];
 
         assert type != null && !type.trim().isEmpty() : "Task type cannot be null or empty";
-        assert description != null && !description.trim().isEmpty() :
-                "Task description cannot be null or empty";
+        assert description != null && !description.trim().isEmpty()
+                : "Task description cannot be null or empty";
 
         Task task = createTaskByType(type, description, parts);
         if (task != null && isDone) {

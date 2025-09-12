@@ -62,8 +62,8 @@ public class TaskList {
     public String addTask(Task task, Ui ui, boolean isGui) {
         assert task != null : "Cannot add null task";
         assert ui != null : "UI cannot be null";
-        assert task.getDescription() != null && !task.getDescription().trim().isEmpty() :
-                "Task description cannot be null or empty";
+        assert task.getDescription() != null && !task.getDescription().trim().isEmpty()
+                : "Task description cannot be null or empty";
 
         tasks.add(task);
         storage.saveTask(task);

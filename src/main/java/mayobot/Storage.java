@@ -3,7 +3,9 @@ package mayobot;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import mayobot.task.Task;
 import mayobot.task.TaskList;
@@ -69,14 +71,11 @@ public class Storage {
         assert file.exists() : "File should exist before reading";
         assert file.canRead() : "File should be readable";
 
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                Task task = Parser.parseTaskFromFile(line);
-                if (task != null) {
-                    taskList.addTaskToList(task);
-                }
-            }
+        // Stream-based file reading
+        try (Stream<String> lines = Files.lines(file.toPath())) {
+            lines.map(Parser::parseTaskFromFile)
+                    .filter(Objects::nonNull)
+                    .forEach(taskList::addTaskToList);
         }
         return taskList;
     }
