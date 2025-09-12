@@ -17,6 +17,10 @@ package mayobot.exceptions;
  * </ul>
  */
 public class DeadlineException extends MayoBotException {
+    private static final String COMMAND_TYPE = "deadline";
+    private static final String DEFAULT_HELP = "Use format: deadline <description> /by <date>";
+    private static final String DATE_ERROR_PREFIX = "Date format error: ";
+
     /**
      * Constructs a new DeadlineException with the default error message.
      * <p>
@@ -25,6 +29,14 @@ public class DeadlineException extends MayoBotException {
      * validation failures.
      */
     public DeadlineException() {
-        super("Input is not the correct format for the \"deadline\" command.");
+        super(COMMAND_TYPE, DEFAULT_HELP);
+    }
+
+    public static DeadlineException dateParsingError(String dateString) {
+        return new DeadlineException(DATE_ERROR_PREFIX + "Unable to parse date '" + dateString + "'");
+    }
+
+    private DeadlineException(String message) {
+        super(message);
     }
 }

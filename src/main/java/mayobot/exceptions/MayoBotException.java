@@ -14,6 +14,8 @@ package mayobot.exceptions;
  * types of user input or application errors.
  */
 public class MayoBotException extends Exception {
+    private static final String ERROR_PREFIX = "☹ OOPS: ";
+
     /**
      * Constructs a new MayoBotException with the specified error message.
      * <p>
@@ -24,6 +26,11 @@ public class MayoBotException extends Exception {
      * @param message the detailed error message describing what went wrong
      */
     public MayoBotException(String message) {
-        super("☹ OOPS: " + message);
+        super(ERROR_PREFIX + message);
+    }
+
+    public MayoBotException(String commandType, String defaultMessage) {
+        super(ERROR_PREFIX + String.format("Input is not the correct format for the \"%s\" command. %s",
+                commandType, defaultMessage));
     }
 }

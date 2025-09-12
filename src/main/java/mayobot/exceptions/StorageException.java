@@ -23,6 +23,8 @@ package mayobot.exceptions;
  * action before losing their task data.
  */
 public class StorageException extends MayoBotException {
+    private static final String DEFAULT_MESSAGE = "Error occurred while accessing tasks.txt file";
+
     /**
      * Constructs a new StorageException with the default error message.
      * <p>
@@ -31,6 +33,18 @@ public class StorageException extends MayoBotException {
      * storage-related failures where specific details may not be available.
      */
     public StorageException() {
-        super("Ran into error when dealing with tasks.txt");
+        super(DEFAULT_MESSAGE);
+    }
+
+    public static StorageException readError(String details) {
+        return new StorageException("Unable to read from tasks.txt: " + details);
+    }
+
+    public static StorageException writeError(String details) {
+        return new StorageException("Unable to write to tasks.txt: " + details);
+    }
+
+    private StorageException(String message) {
+        super(message);
     }
 }

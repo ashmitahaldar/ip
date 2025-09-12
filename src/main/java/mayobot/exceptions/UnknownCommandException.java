@@ -12,6 +12,8 @@ package mayobot.exceptions;
  * understand what went wrong and potentially correct their input.
  */
 public class UnknownCommandException extends MayoBotException {
+    private static final String ERROR_TEMPLATE = "Unknown command: '%s'";
+
     /**
      * Constructs a new UnknownCommandException with the unrecognized command.
      * <p>
@@ -22,6 +24,6 @@ public class UnknownCommandException extends MayoBotException {
      * @param message the unrecognized command string that was entered by the user
      */
     public UnknownCommandException(String message) {
-        super("Input is not a valid command: " + message);
+        super(String.format(ERROR_TEMPLATE, message));
     }
 }

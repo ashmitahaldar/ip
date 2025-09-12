@@ -15,6 +15,8 @@ package mayobot.exceptions;
  * </ul>
  */
 public class MarkException extends MayoBotException {
+    private static final String COMMAND_TYPE = "mark";
+    private static final String DEFAULT_HELP = "Use format: mark <task number>";
     /**
      * Constructs a new MarkException with the default error message.
      * <p>
@@ -23,6 +25,6 @@ public class MarkException extends MayoBotException {
      * a valid task number.
      */
     public MarkException() {
-        super("Input is not the correct format for the \"mark\" command.");
+        super(COMMAND_TYPE, DEFAULT_HELP);
     }
 }

@@ -19,6 +19,9 @@ package mayobot.exceptions;
  * This exception ensures users provide meaningful task descriptions.
  */
 public class TodoException extends MayoBotException {
+    private static final String COMMAND_TYPE = "todo";
+    private static final String HELP_MESSAGE = "Please provide a task description.";
+
     /**
      * Constructs a new TodoException with the default error message.
      * <p>
@@ -27,6 +30,10 @@ public class TodoException extends MayoBotException {
      * provide a valid task description.
      */
     public TodoException() {
-        super("Input is not the correct format for the \"todo\" command.");
+        super(COMMAND_TYPE, HELP_MESSAGE);
+    }
+
+    public TodoException(String customMessage) {
+        super(customMessage);
     }
 }

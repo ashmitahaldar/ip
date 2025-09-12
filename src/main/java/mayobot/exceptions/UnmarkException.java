@@ -19,6 +19,9 @@ package mayobot.exceptions;
  * when tasks were marked as done by mistake or require additional work.
  */
 public class UnmarkException extends MayoBotException {
+    private static final String COMMAND_TYPE = "unmark";
+    private static final String DEFAULT_HELP = "Use format: unmark <task number>";
+
     /**
      * Constructs a new UnmarkException with the default error message.
      * <p>
@@ -27,6 +30,6 @@ public class UnmarkException extends MayoBotException {
      * provide a valid task number to unmark.
      */
     public UnmarkException() {
-        super("Input is not the correct format for the \"unmark\" command.");
+        super(COMMAND_TYPE, DEFAULT_HELP);
     }
 }

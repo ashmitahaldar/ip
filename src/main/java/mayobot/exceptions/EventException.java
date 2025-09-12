@@ -19,6 +19,9 @@ package mayobot.exceptions;
  * </ul>
  */
 public class EventException extends MayoBotException {
+    private static final String COMMAND_TYPE = "event";
+    private static final String DEFAULT_HELP = "Use format: event <description> /from <start> /to <end>";
+
     /**
      * Constructs a new EventException with the default error message.
      * <p>
@@ -27,6 +30,22 @@ public class EventException extends MayoBotException {
      * validation failures.
      */
     public EventException() {
-        super("Input is not the correct format for the \"event\" command.");
+        super(COMMAND_TYPE, DEFAULT_HELP);
+    }
+
+    public static EventException missingFromKeyword() {
+        return new EventException("Missing '/from' keyword in event command");
+    }
+
+    public static EventException missingToKeyword() {
+        return new EventException("Missing '/to' keyword in event command");
+    }
+
+    public static EventException dateParsingError(String details) {
+        return new EventException("Date format error: " + details);
+    }
+
+    private EventException(String message) {
+        super(message);
     }
 }

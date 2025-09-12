@@ -18,6 +18,9 @@ package mayobot.exceptions;
  * range validation (invalid task indices) for the delete operation.
  */
 public class DeleteException extends MayoBotException {
+    private static final String COMMAND_TYPE = "delete";
+    private static final String DEFAULT_HELP = "Use format: delete <task number>";
+
     /**
      * Constructs a new DeleteException with the default error message.
      * <p>
@@ -26,6 +29,6 @@ public class DeleteException extends MayoBotException {
      * out-of-bounds task indices.
      */
     public DeleteException() {
-        super("Input is incorrect for the \"delete\" command.");
+        super(COMMAND_TYPE, DEFAULT_HELP);
     }
 }
