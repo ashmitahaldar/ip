@@ -58,12 +58,19 @@ public class TaskList {
      * @param ui
      */
     public String addTask(Task task, Ui ui, boolean isGui) {
+        assert task != null : "Cannot add null task";
+        assert ui != null : "UI cannot be null";
+        assert task.getDescription() != null && !task.getDescription().trim().isEmpty() :
+                "Task description cannot be null or empty";
+
         tasks.add(task);
         storage.saveTask(task);
+
         StringBuilder result = new StringBuilder();
         result.append("Got it. I've added this task:\n");
         result.append("\t" + task + "\n");
         result.append("Now you have " + tasks.size() + " task(s) in the list.");
+
         if (!isGui) {
             ui.showMessage(result.toString());
         }
@@ -82,6 +89,9 @@ public class TaskList {
      * @param task the task to add to the list only
      */
     public void addTaskToList(Task task) {
+        assert task != null : "Cannot add null task to list";
+        assert task.getDescription() != null : "Task description cannot be null";
+
         tasks.add(task);
     }
 
@@ -98,6 +108,9 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public Task getTask(int index) {
+        assert index >= 0 : "Index cannot be negative: " + index;
+        assert index < tasks.size() : "Index out of bounds: " + index + ", size: " + tasks.size();
+
         return tasks.get(index);
     }
 
@@ -116,12 +129,18 @@ public class TaskList {
      * @throws IndexOutOfBoundsException if the index is out of range
      */
     public String deleteTask(int index, Ui ui, boolean isGui) {
+        assert ui != null : "UI cannot be null";
+        assert index >= 1 : "Index should be 1-based positive: " + index;
+        assert index <= tasks.size() : "Index out of bounds: " + index + ", size: " + tasks.size();
+
         Task deletedTask = tasks.remove(index - 1);
         storage.saveTasks(this);
+
         StringBuilder result = new StringBuilder();
         result.append("Noted. I've removed this task:\n");
         result.append("\t" + deletedTask + "\n");
         result.append("Now you have " + tasks.size() + " task(s) in the list.");
+
         if (!isGui) {
             ui.showMessage(result.toString());
         }
@@ -187,6 +206,8 @@ public class TaskList {
      * @return true if the task was successfully marked, false if index is invalid
      */
     public boolean markTaskAsDone(int index) {
+        assert index >= 1 : "Index should be 1-based positive: " + index;
+
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsDone();
             storage.saveTasks(this);
@@ -211,6 +232,8 @@ public class TaskList {
      * @return true if the task was successfully unmarked, false if index is invalid
      */
     public boolean markTaskAsNotDone(int index) {
+        assert index >= 1 : "Index should be 1-based positive: " + index;
+
         if (index <= tasks.size()) {
             tasks.get(index - 1).markAsNotDone();
             storage.saveTasks(this);
@@ -233,6 +256,9 @@ public class TaskList {
      * @return an ArrayList containing arrays of [originalIndex, matchingTask]
      */
     public ArrayList<Object[]> findTasks(String searchTerm) {
+        assert searchTerm != null : "Search term cannot be null";
+        assert !searchTerm.trim().isEmpty() : "Search term cannot be empty";
+
         ArrayList<Object[]> matchingResults = new ArrayList<>();
 
         for (int i = 0; i < tasks.size(); i++) {

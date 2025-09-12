@@ -67,6 +67,9 @@ public class Parser {
      * @see EventTask
      */
     public static Task parseTaskFromFile(String input) {
+        assert input != null : "Input string cannot be null";
+        assert !input.trim().isEmpty() : "Input string cannot be empty";
+
         String[] parts = validateAndSplitInput(input);
         if (parts == null) {
             return null;
@@ -75,6 +78,10 @@ public class Parser {
         String type = parts[0];
         boolean isDone = parseDoneStatus(parts[1]);
         String description = parts[2];
+
+        assert type != null && !type.trim().isEmpty() : "Task type cannot be null or empty";
+        assert description != null && !description.trim().isEmpty() :
+                "Task description cannot be null or empty";
 
         Task task = createTaskByType(type, description, parts);
         if (task != null && isDone) {
