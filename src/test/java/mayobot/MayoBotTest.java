@@ -69,7 +69,16 @@ public class MayoBotTest {
     // MayoBot should handle IOException during task loading
     @Test
     public void mayoBot_loadTaskList_ioException() {
-        String invalidPath = "/invalid/readonly/path.txt";
+        String invalidPath;
+        String os = System.getProperty("os.name").toLowerCase();
+
+        if (os.contains("win")) {
+            // Windows: Use invalid characters in filename
+            invalidPath = "C:\\invalid<>path\\readonly?.txt";
+        } else {
+            // Unix/Linux/macOS: Use path that requires root permissions
+            invalidPath = "/root/readonly/invalid.txt";
+        }
 
         MayoBot bot = new MayoBot(invalidPath);
 
