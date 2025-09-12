@@ -36,9 +36,15 @@ public class MayoBot {
      * @param filePath the file path where tasks should be stored and loaded from
      */
     public MayoBot(String filePath) {
+        assert filePath != null : "File path cannot be null";
+
         ui = new Ui();
         storage = new Storage(filePath);
         taskList = loadTaskList();
+
+        assert this.ui != null : "UI should be initialized";
+        assert this.storage != null : "Storage should be initialized";
+        assert this.taskList != null : "TaskList should be initialized";
     }
 
     /**
