@@ -24,6 +24,15 @@ public class FindCommand extends Command {
     private static final String MISSING_SEARCH_TERM_MESSAGE = "Please specify a search term.";
     private static final String NO_TASK_FOUND_MESSAGE = "No matching tasks found.";
 
+    private static final String FUZZY_SEARCH_INDICATOR = " (fuzzy search)";
+    private static final String STRICT_SEARCH_INDICATOR = " (exact word search)";
+
+    private static final double FUZZY_THRESHOLD = 0.7; // 70% similarity threshold
+
+    private final boolean fuzzySearch;
+    private final boolean strictSearch;
+    private final String searchTerm;
+
     /**
      * Constructs a new FindCommand with the specified search arguments.
      *
@@ -31,6 +40,20 @@ public class FindCommand extends Command {
      */
     public FindCommand(String arguments) {
         super("find", arguments);
+
+        String trimmedArgs = arguments.trim();
+
+        this.fuzzySearch = trimmedArgs.startsWith("--fuzzy");
+        this.strictSearch = trimmedArgs.startsWith("--strict");
+
+        // Extract search term by removing flags
+        if (fuzzySearch) {
+            this.searchTerm = trimmedArgs.replaceFirst("^--fuzzy\\s*", "").trim();
+        } else if (strictSearch) {
+            this.searchTerm = trimmedArgs.replaceFirst("^--strict\\s*", "").trim();
+        } else {
+            this.searchTerm = trimmedArgs;
+        }
     }
 
     /**
@@ -49,35 +72,102 @@ public class FindCommand extends Command {
      */
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
-        String arguments = this.getArguments();
-        if (arguments.trim().isEmpty()) {
+        if (searchTerm.isEmpty()) {
+            String helpMessage = buildHelpMessage();
             if (!isGui) {
-                ui.showMessage(MISSING_SEARCH_TERM_MESSAGE);
+                ui.showMessage(helpMessage);
             }
-            return buildResponse(MISSING_SEARCH_TERM_MESSAGE);
-        } else {
-            ArrayList<Object[]> matchingTasks = taskList.findTasks(arguments.trim());
-            if (matchingTasks.isEmpty()) {
-                if (!isGui) {
-                    ui.showMessage(NO_TASK_FOUND_MESSAGE);
-                }
-                return buildResponse(NO_TASK_FOUND_MESSAGE);
-            } else {
-                StringBuilder response = new StringBuilder();
-                if (!isGui) {
-                    ui.showMessage(LIST_OUTPUT_HEADER);
-                }
-                response.append(LIST_OUTPUT_HEADER + "\n");
-                for (Object[] matchingTask : matchingTasks) {
-                    int index = (Integer) matchingTask[0];
-                    Task task = (Task) matchingTask[1];
-                    if (!isGui) {
-                        ui.showMessage(index + ". " + task);
-                    }
-                    response.append(index + ". " + task + "\n");
-                }
-                return buildResponse(response.toString());
-            }
+            return buildResponse(helpMessage);
         }
+
+        ArrayList<Object[]> matchingTasks = performSearch(taskList);
+
+        if (matchingTasks.isEmpty()) {
+            String noResultsMessage = buildNoResultsMessage();
+            if (!isGui) {
+                ui.showMessage(noResultsMessage);
+            }
+            return buildResponse(noResultsMessage);
+        }
+
+        return buildSearchResults(ui, matchingTasks, isGui);
+    }
+
+    /**
+     * Performs the appropriate search based on the search mode.
+     */
+    private ArrayList<Object[]> performSearch(TaskList taskList) {
+        if (fuzzySearch) {
+            return taskList.findTasksFuzzy(searchTerm, FUZZY_THRESHOLD);
+        } else if (strictSearch) {
+            return taskList.findTasksStrict(searchTerm);
+        } else {
+            return taskList.findTasks(searchTerm); // Your existing partial match method
+        }
+    }
+
+    /**
+     * Builds help message for invalid search input.
+     */
+    private String buildHelpMessage() {
+        return MISSING_SEARCH_TERM_MESSAGE + "\n"
+                + "Usage:\n"
+                + "  find <search_term> - partial matching\n"
+                + "  find --fuzzy <search_term> - fuzzy matching (handles typos)\n"
+                + "  find --strict <search_term> - exact word matching";
+    }
+
+    /**
+     * Builds no results message with search mode indicator.
+     */
+    private String buildNoResultsMessage() {
+        String searchMode = "";
+        if (fuzzySearch) {
+            searchMode = FUZZY_SEARCH_INDICATOR;
+        } else if (strictSearch) {
+            searchMode = STRICT_SEARCH_INDICATOR;
+        }
+
+        return NO_TASK_FOUND_MESSAGE + " for \"" + searchTerm + "\"" + searchMode;
+    }
+
+    /**
+     * Builds and returns the search results response.
+     */
+    private String buildSearchResults(Ui ui, ArrayList<Object[]> matchingTasks, boolean isGui) {
+        StringBuilder response = new StringBuilder();
+        String header = buildSearchHeader(matchingTasks.size());
+
+        if (!isGui) {
+            ui.showMessage(header);
+        }
+        response.append(header).append("\n");
+
+        for (Object[] matchingTask : matchingTasks) {
+            int index = (Integer) matchingTask[0];
+            Task task = (Task) matchingTask[1];
+            String taskLine = index + ". " + task;
+
+            if (!isGui) {
+                ui.showMessage(taskLine);
+            }
+            response.append(taskLine).append("\n");
+        }
+
+        return buildResponse(response.toString());
+    }
+
+    /**
+     * Builds the search results header with search mode indicator.
+     */
+    private String buildSearchHeader(int resultCount) {
+        String searchMode = "";
+        if (fuzzySearch) {
+            searchMode = FUZZY_SEARCH_INDICATOR;
+        } else if (strictSearch) {
+            searchMode = STRICT_SEARCH_INDICATOR;
+        }
+
+        return LIST_OUTPUT_HEADER + " (" + resultCount + " found)" + searchMode;
     }
 }
