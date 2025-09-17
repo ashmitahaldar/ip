@@ -58,7 +58,8 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(String s, Image i) {
-        return new DialogBox(s, i);
+        var db = new DialogBox(s, i);
+        return db;
     }
 
     public static DialogBox getMayoBotDialog(String s, Image i) {
