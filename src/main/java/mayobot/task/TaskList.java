@@ -1,11 +1,13 @@
 package mayobot.task;
 
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import mayobot.Storage;
 import mayobot.ui.Ui;
+import mayobot.util.SearchMatcher;
 
 /**
  * Manages a collection of tasks and provides operations for task manipulation.
@@ -263,6 +265,45 @@ public class TaskList {
 
         return IntStream.range(0, tasks.size())
                 .filter(i -> tasks.get(i).getDescription().toLowerCase().contains(searchTerm.toLowerCase()))
+                .mapToObj(i -> new Object[]{i + 1, tasks.get(i)})
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * Finds tasks that match the search term using fuzzy matching with streams.
+     * This method handles typos and similar words using Levenshtein distance.
+     * The search is performed using Java streams for efficient processing.
+     *
+     * @param keyword the search term to match against
+     * @param threshold similarity threshold (0.0 to 1.0)
+     * @return list of matching tasks with their original indices
+     */
+    public ArrayList<Object[]> findTasksFuzzy(String keyword, double threshold) {
+        assert keyword != null : "Search keyword cannot be null";
+        assert !keyword.trim().isEmpty() : "Search keyword cannot be empty";
+        assert threshold >= 0.0 && threshold <= 1.0 : "Threshold must be between 0.0 and 1.0";
+
+        return IntStream.range(0, tasks.size())
+                .filter(i -> SearchMatcher.fuzzyMatch(keyword, tasks.get(i).getDescription(), threshold))
+                .mapToObj(i -> new Object[]{i + 1, tasks.get(i)})
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    /**
+     * Finds tasks that contain the exact search term as a whole word using streams.
+     * This method performs exact word matching (case-insensitive).
+     *
+     * @param keyword the exact word to search for
+     * @return list of matching tasks with their original indices
+     */
+    public ArrayList<Object[]> findTasksStrict(String keyword) {
+        assert keyword != null : "Search keyword cannot be null";
+        assert !keyword.trim().isEmpty() : "Search keyword cannot be empty";
+
+        String searchPattern = "\\b" + Pattern.quote(keyword.toLowerCase()) + "\\b";
+
+        return IntStream.range(0, tasks.size())
+                .filter(i -> tasks.get(i).getDescription().toLowerCase().matches(".*" + searchPattern + ".*"))
                 .mapToObj(i -> new Object[]{i + 1, tasks.get(i)})
                 .collect(Collectors.toCollection(ArrayList::new));
     }
