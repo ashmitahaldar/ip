@@ -50,15 +50,15 @@ public class UnmarkCommand extends Command {
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         String arguments = this.getArguments();
-        boolean success = false;
+        boolean isSuccessful = false;
         if (arguments.trim().isEmpty()) {
             throw new UnmarkException();
         }
 
         try {
             int unmarkIndex = Integer.parseInt(arguments);
-            success = taskList.markTaskAsNotDone(unmarkIndex);
-            if (success) {
+            isSuccessful = taskList.markTaskAsNotDone(unmarkIndex);
+            if (isSuccessful) {
                 if (!isGui) {
                     ui.showMessage(UNMARK_SUCCESS_MESSAGE);
                     taskList.printTask(unmarkIndex, ui);

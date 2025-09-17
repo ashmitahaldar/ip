@@ -48,15 +48,15 @@ public class MarkCommand extends Command {
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
         String arguments = this.getArguments();
-        boolean success = false;
+        boolean isSuccessful = false;
         if (arguments.trim().isEmpty()) {
             throw new MarkException();
         }
 
         try {
             int markIndex = Integer.parseInt(arguments);
-            success = taskList.markTaskAsDone(markIndex);
-            if (success) {
+            isSuccessful = taskList.markTaskAsDone(markIndex);
+            if (isSuccessful) {
                 if (!isGui) {
                     ui.showMessage(MARK_SUCCESS_MESSAGE);
                     taskList.printTask(markIndex, ui);
