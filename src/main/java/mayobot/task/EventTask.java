@@ -100,7 +100,7 @@ public class EventTask extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString()
-                + " (from:" + from.format(DISPLAY_FORMAT)
-                + " | to:" + to.format(DISPLAY_FORMAT) + ")";
+                + " (from: " + from.format(DISPLAY_FORMAT)
+                + " | to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }

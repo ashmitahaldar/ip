@@ -15,14 +15,14 @@ import mayobot.ui.Ui;
  * results include the original task indices and display the matching tasks in a
  * numbered list format.
  * <p>
- * Usage: {@code find <search_term>}
+ * Usage: {@code find <--fuzzy/--strict> <search_term>}
  * <p>
  * Example: {@code find meeting} - finds all tasks containing the word "meeting"
  */
 public class FindCommand extends Command {
-    private static final String LIST_OUTPUT_HEADER = "Here are the matching tasks in your list:";
-    private static final String MISSING_SEARCH_TERM_MESSAGE = "Please specify a search term.";
-    private static final String NO_TASK_FOUND_MESSAGE = "No matching tasks found.";
+    private static final String LIST_OUTPUT_HEADER = "(ㅅ´ ˘ `) Here are the matching tasks:";
+    private static final String MISSING_SEARCH_TERM_MESSAGE = "(｡•́︿•̀｡) Please specify a search term.";
+    private static final String NO_TASK_FOUND_MESSAGE = "\"( – ⌓ – ) No matching tasks found";
 
     private static final String FUZZY_SEARCH_INDICATOR = " (fuzzy search)";
     private static final String STRICT_SEARCH_INDICATOR = " (exact word search)";

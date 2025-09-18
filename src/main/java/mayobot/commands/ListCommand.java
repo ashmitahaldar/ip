@@ -17,7 +17,7 @@ import mayobot.ui.Ui;
  * of their type (todo, deadline, or event) or completion status.
  */
 public class ListCommand extends Command {
-    private static final String LIST_OUTPUT_HEADER = "Here are the tasks in your list:";
+    private static final String LIST_OUTPUT_HEADER = "₊˚⊹ ♡ Here are the tasks in your list:";
 
     /**
      * Constructs a new ListCommand with the specified arguments.

@@ -93,7 +93,7 @@ public class DeadlineTask extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString()
-                + " (by:" + by.format(DISPLAY_FORMAT) + ")";
+                + " (by: " + by.format(DISPLAY_FORMAT) + ")";
     }
 }
 

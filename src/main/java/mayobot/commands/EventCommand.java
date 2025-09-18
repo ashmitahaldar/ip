@@ -68,9 +68,10 @@ public class EventCommand extends Command {
 
         String eventDescription = fromSplit[0];
         String fromAndTo = fromSplit[1];
+        validateFromSplit(fromSplit);
 
         String[] toSplit = fromAndTo.split(TO_SEPARATOR, EXPECTED_PARTS);
-        validateFromSplit(toSplit);
+        validateToSplit(toSplit);
 
         String eventFrom = toSplit[0];
         String eventTo = toSplit[1];

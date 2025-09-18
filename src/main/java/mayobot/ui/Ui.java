@@ -23,6 +23,13 @@ public class Ui {
                 + "|  (_,_)  |  ||  _( )_  ||   `-'  /    \\ `\"/  \\  ) / | (_{;}_) | \\ `\"/  \\  ) /  (_(=)_)\n"
                 + "|  |      |  |\\ (_ o _) / \\      /      '. \\_/``\".'  |  (_,_)  /  '. \\_/``\".'    (_I_)\n"
                 + "'--'      '--' '.(_,_).'   `-..-'         '-----'    /_______.'     '-----'      '---'\n";
+    private static final String WELCOME_MESSAGE = "Hello, I'm MayoBot! ◝(ᵔᵕᵔ)◜༘⋆✿"
+            + "\n"
+            + "☆ The cutest to-do assistant on the internet ☆"
+            + "\n"
+            + "What can I do for you⋆｡°✩?";
+    private static final String GOODBYE_MESSAGE = "Bye! Hope to see you again soon~☆";
+
     private Scanner scanner;
 
     /**
@@ -53,8 +60,7 @@ public class Ui {
 
     public String getWelcome() {
         StringBuilder welcome = new StringBuilder();
-        welcome.append("Hello, I'm MayoBot!" + "\n");
-        welcome.append("What can I do for you?");
+        welcome.append(WELCOME_MESSAGE);
         return welcome.toString();
     }
 
@@ -65,7 +71,7 @@ public class Ui {
      * or when the application is shutting down normally.
      */
     public void showGoodbye() {
-        System.out.println("\tBye. Hope to see you again soon!");
+        System.out.println("\t" + GOODBYE_MESSAGE);
         showLine();
     }
 

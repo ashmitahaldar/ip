@@ -2,6 +2,7 @@ package mayobot.commands;
 
 import mayobot.exceptions.DeleteException;
 import mayobot.exceptions.MayoBotException;
+import mayobot.task.Task;
 import mayobot.task.TaskList;
 import mayobot.ui.Ui;
 
@@ -50,7 +51,10 @@ public class DeleteCommand extends Command {
 
         try {
             int deleteIndex = Integer.parseInt(arguments);
-            String deleteTaskMessage = taskList.deleteTask(deleteIndex, ui, isGui);
+            Task deletedTask = taskList.deleteTask(deleteIndex);
+            String deleteTaskMessage = "(˵ •̀ ᴗ - ˵ ) ✧ I've removed this task:\n"
+                    + "\t" + deletedTask + "\n"
+                    + "Now you have " + taskList.getSize() + " task(s) in the list ₊˚⊹⋆";
             if (!isGui) {
                 ui.showMessage(deleteTaskMessage);
             }

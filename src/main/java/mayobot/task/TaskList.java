@@ -61,7 +61,7 @@ public class TaskList {
      * @param task the task to add to the list and save to storage
      * @param ui
      */
-    public String addTask(Task task, Ui ui, boolean isGui) {
+    public void addTask(Task task, Ui ui, boolean isGui) {
         assert task != null : "Cannot add null task";
         assert ui != null : "UI cannot be null";
         assert task.getDescription() != null && !task.getDescription().trim().isEmpty()
@@ -69,16 +69,6 @@ public class TaskList {
 
         tasks.add(task);
         storage.saveTask(task);
-
-        StringBuilder result = new StringBuilder();
-        result.append("Got it. I've added this task:\n");
-        result.append("\t" + task + "\n");
-        result.append("Now you have " + tasks.size() + " task(s) in the list.");
-
-        if (!isGui) {
-            ui.showMessage(result.toString());
-        }
-        return result.toString();
     }
 
     /**
@@ -129,26 +119,16 @@ public class TaskList {
      * task list is saved to maintain consistency in storage.
      *
      * @param index the one-based index of the task to remove
-     * @param ui
      * @throws IndexOutOfBoundsException if the index is out of range
      */
-    public String deleteTask(int index, Ui ui, boolean isGui) {
-        assert ui != null : "UI cannot be null";
+    public Task deleteTask(int index) {
         assert index >= 1 : "Index should be 1-based positive: " + index;
         assert index <= tasks.size() : "Index out of bounds: " + index + ", size: " + tasks.size();
 
         Task deletedTask = tasks.remove(index - 1);
         storage.saveTasks(this);
 
-        StringBuilder result = new StringBuilder();
-        result.append("Noted. I've removed this task:\n");
-        result.append("\t" + deletedTask + "\n");
-        result.append("Now you have " + tasks.size() + " task(s) in the list.");
-
-        if (!isGui) {
-            ui.showMessage(result.toString());
-        }
-        return result.toString();
+        return deletedTask;
     }
 
     /**

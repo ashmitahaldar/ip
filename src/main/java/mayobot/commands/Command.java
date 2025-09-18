@@ -106,10 +106,13 @@ public abstract class Command {
     }
 
     protected String handleTaskCreation(Task task, TaskList taskList, Ui ui, boolean isGui) {
-        String message = taskList.addTask(task, ui, isGui);
+        taskList.addTask(task, ui, isGui);
+        String response = "٩(^ᗜ^ )و ´- I've added this task:\n"
+                + "\t" + task + "\n"
+                + "Now you have " + taskList.getSize() + " task(s) in the list ⋆˙⟡♡";
         if (!isGui) {
-            ui.showMessage(message);
+            ui.showMessage(response);
         }
-        return buildResponse(message);
+        return buildResponse(response);
     }
 }

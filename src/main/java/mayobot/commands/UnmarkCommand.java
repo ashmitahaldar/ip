@@ -18,8 +18,8 @@ import mayobot.ui.Ui;
  * Example: {@code unmark 3} - marks the third task in the list as not completed
  */
 public class UnmarkCommand extends Command {
-    private static final String UNMARK_SUCCESS_MESSAGE = "OK, I've marked this task as not done yet:";
-    private static final String UNMARK_FAILURE_MESSAGE = "Sorry, I was not able to mark the specified task as "
+    private static final String UNMARK_SUCCESS_MESSAGE = "ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧ I've marked this task as not done yet:";
+    private static final String UNMARK_FAILURE_MESSAGE = "( ˶°ㅁ°) !! I was not able to mark the specified task as "
                                                         + "not done yet.";
 
     /**

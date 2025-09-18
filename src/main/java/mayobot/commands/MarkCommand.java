@@ -17,8 +17,8 @@ import mayobot.ui.Ui;
  * Example: {@code mark 2} - marks the second task in the list as completed
  */
 public class MarkCommand extends Command {
-    private static final String MARK_SUCCESS_MESSAGE = "Nice! I've marked this task as done:";
-    private static final String MARK_FAILURE_MESSAGE = "Sorry, I was not able to mark the specified task as done.";
+    private static final String MARK_SUCCESS_MESSAGE = "ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧ I've marked this task as done:";
+    private static final String MARK_FAILURE_MESSAGE = "( ˶°ㅁ°) !! I was not able to mark the specified task as done.";
 
     /**
      * Constructs a new MarkCommand with the specified arguments.
