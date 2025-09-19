@@ -31,4 +31,8 @@ public class DeleteException extends MayoBotException {
     public DeleteException() {
         super(COMMAND_TYPE, DEFAULT_HELP);
     }
+
+    public DeleteException(String message) {
+        super(message);
+    }
 }

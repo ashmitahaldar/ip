@@ -27,4 +27,8 @@ public class MarkException extends MayoBotException {
     public MarkException() {
         super(COMMAND_TYPE, DEFAULT_HELP);
     }
+
+    public MarkException(String message) {
+        super(message);
+    }
 }

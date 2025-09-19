@@ -1,4 +1,4 @@
-package mayobot;
+package mayobot.commands;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,9 +14,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mayobot.commands.ByeCommand;
-import mayobot.commands.Command;
-import mayobot.commands.MarkCommand;
+import mayobot.Storage;
 import mayobot.exceptions.MarkException;
 import mayobot.exceptions.MayoBotException;
 import mayobot.task.TaskList;

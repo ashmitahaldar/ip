@@ -51,7 +51,16 @@ public class DeleteCommand extends Command {
 
         try {
             int deleteIndex = Integer.parseInt(arguments);
-            Task deletedTask = taskList.deleteTask(deleteIndex);
+            validateIndex(deleteIndex, taskList);
+            Task deletedTask = null;
+
+            try {
+                deletedTask = taskList.deleteTask(deleteIndex);
+            } catch (AssertionError e) {
+                // Convert AssertionError to DeleteException
+                throw new DeleteException(e.getMessage());
+            }
+
             String deleteTaskMessage = "(˵ •̀ ᴗ - ˵ ) ✧ I've removed this task:\n"
                     + "\t" + deletedTask + "\n"
                     + "Now you have " + taskList.getSize() + " task(s) in the list ₊˚⊹⋆";
@@ -61,6 +70,16 @@ public class DeleteCommand extends Command {
             return buildResponse(deleteTaskMessage);
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
             throw new DeleteException();
+        }
+    }
+
+    private void validateIndex(int deleteIndex, TaskList taskList) throws DeleteException {
+        if (deleteIndex <= 0) {
+            throw new DeleteException("Task number must be a positive number!");
+        }
+        if (deleteIndex > taskList.getSize()) {
+            throw new DeleteException("Task number " + deleteIndex + " does not exist! You have "
+                    + taskList.getSize() + " task(s) in your list.");
         }
     }
 }

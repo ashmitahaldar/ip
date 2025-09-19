@@ -55,6 +55,11 @@ public class MarkCommand extends Command {
 
         try {
             int markIndex = Integer.parseInt(arguments);
+            // Validate index bounds
+            if (markIndex - 1 < 0 || markIndex - 1 >= taskList.getSize()) {
+                throw new MarkException("Σ(ﾟ口ﾟ;)// Task number " + markIndex + " does not exist! "
+                        + "You have " + taskList.getSize() + " task(s) in your list.");
+            }
             isSuccessful = taskList.markTaskAsDone(markIndex);
             if (isSuccessful) {
                 if (!isGui) {

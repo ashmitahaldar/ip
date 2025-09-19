@@ -2,6 +2,7 @@ package mayobot.commands;
 
 import java.util.ArrayList;
 
+import mayobot.exceptions.FindException;
 import mayobot.exceptions.MayoBotException;
 import mayobot.task.Task;
 import mayobot.task.TaskList;
@@ -71,13 +72,10 @@ public class FindCommand extends Command {
      * @throws MayoBotException if an error occurs during task searching
      */
     @Override
-    public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
+    public String execute(Ui ui, TaskList taskList, boolean isGui) throws FindException {
         if (searchTerm.isEmpty()) {
             String helpMessage = buildHelpMessage();
-            if (!isGui) {
-                ui.showMessage(helpMessage);
-            }
-            return buildResponse(helpMessage);
+            throw new FindException(helpMessage);
         }
 
         ArrayList<Object[]> matchingTasks = performSearch(taskList);
@@ -96,13 +94,17 @@ public class FindCommand extends Command {
     /**
      * Performs the appropriate search based on the search mode.
      */
-    private ArrayList<Object[]> performSearch(TaskList taskList) {
-        if (fuzzySearch) {
-            return taskList.findTasksFuzzy(searchTerm, FUZZY_THRESHOLD);
-        } else if (strictSearch) {
-            return taskList.findTasksStrict(searchTerm);
-        } else {
-            return taskList.findTasks(searchTerm); // Your existing partial match method
+    private ArrayList<Object[]> performSearch(TaskList taskList) throws FindException {
+        try {
+            if (fuzzySearch) {
+                return taskList.findTasksFuzzy(searchTerm, FUZZY_THRESHOLD);
+            } else if (strictSearch) {
+                return taskList.findTasksStrict(searchTerm);
+            } else {
+                return taskList.findTasks(searchTerm); // Your existing partial match method
+            }
+        } catch (Exception e) {
+            throw new FindException("Search operation failed: " + e.getMessage());
         }
     }
 

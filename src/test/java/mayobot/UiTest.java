@@ -50,7 +50,7 @@ public class UiTest {
         ui.showGoodbye();
 
         String output = outputStream.toString();
-        assertTrue(output.contains("Bye. Hope to see you again soon!"));
+        assertTrue(output.contains("Bye! Hope to see you again soon~☆"));
         assertTrue(output.contains("----")); // Part of the line separator
     }
 
@@ -66,19 +66,6 @@ public class UiTest {
         assertEquals(testInput, result);
         testUi.close();
     }
-
-    // TODO: Fix this test and feature
-    //    @Test
-    //    public void ui_readCommand_readsEmptyInput() {
-    //        String testInput = "";
-    //        System.setIn(new ByteArrayInputStream(testInput.getBytes()));
-    //
-    //        Ui testUi = new Ui();
-    //        String result = testUi.readCommand();
-    //
-    //        assertEquals(testInput, result);
-    //        testUi.close();
-    //    }
 
     @Test
     public void ui_readCommand_readsInputWithNewline() {
@@ -181,5 +168,37 @@ public class UiTest {
                         "--------------------------------------------------------------------------------------"))
                 .count();
         assertEquals(2, separatorCount);
+    }
+
+    // Additional test for getWelcome method
+    @Test
+    public void ui_getWelcome_returnsWelcomeMessage() {
+        String welcome = ui.getWelcome();
+
+        assertTrue(welcome.contains("Hello, I'm MayoBot!"));
+        assertTrue(welcome.contains("What can I do for you"));
+        assertTrue(welcome.contains("☆"));
+    }
+
+    // Test for exact tab formatting
+    @Test
+    public void ui_showMessage_hasCorrectTabFormatting() {
+        String testMessage = "Test formatting";
+        ui.showMessage(testMessage);
+
+        String output = outputStream.toString();
+        String expectedOutput = "\t" + testMessage + System.lineSeparator();
+        assertEquals(expectedOutput, output);
+    }
+
+    // Test for exact line separator format
+    @Test
+    public void ui_showLine_hasCorrectFormat() {
+        ui.showLine();
+
+        String output = outputStream.toString();
+        String expectedLine = "\t--------------------------------------------------------------------------------------"
+                + System.lineSeparator();
+        assertEquals(expectedLine, output);
     }
 }

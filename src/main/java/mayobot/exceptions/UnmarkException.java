@@ -32,4 +32,8 @@ public class UnmarkException extends MayoBotException {
     public UnmarkException() {
         super(COMMAND_TYPE, DEFAULT_HELP);
     }
+
+    public UnmarkException(String message) {
+        super(message);
+    }
 }

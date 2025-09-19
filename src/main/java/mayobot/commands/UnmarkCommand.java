@@ -57,6 +57,11 @@ public class UnmarkCommand extends Command {
 
         try {
             int unmarkIndex = Integer.parseInt(arguments);
+            if (unmarkIndex - 1 < 0 || unmarkIndex - 1 >= taskList.getSize()) {
+                throw new UnmarkException("Σ(ﾟ口ﾟ;)// Task number " + unmarkIndex + " does not exist! "
+                        + "You have " + taskList.getSize() + " task(s) in your list.");
+            }
+
             isSuccessful = taskList.markTaskAsNotDone(unmarkIndex);
             if (isSuccessful) {
                 if (!isGui) {

@@ -15,6 +15,8 @@ import mayobot.ui.Ui;
  * as its sole purpose is to initiate application shutdown.
  */
 public class ByeCommand extends Command {
+    public static final String BYE_COMMAND_MESSAGE = "Baiiiヾ( ˃ᴗ˂ )◞ • *✰\nSee you later°❀.ೃ࿔*";
+
     /**
      * Constructs a new ByeCommand with the specified arguments.
      * <p>
@@ -42,7 +44,8 @@ public class ByeCommand extends Command {
      */
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
+        // Set exit flag to true
         this.isExit = true;
-        return null;
+        return BYE_COMMAND_MESSAGE;
     }
 }

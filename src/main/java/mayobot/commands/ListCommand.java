@@ -18,6 +18,7 @@ import mayobot.ui.Ui;
  */
 public class ListCommand extends Command {
     private static final String LIST_OUTPUT_HEADER = "₊˚⊹ ♡ Here are the tasks in your list:";
+    private static final String EMPTY_LIST_MESSAGE = "ᕙ(  •̀ ᗜ •́  )ᕗ You have no tasks!\nTime to chill ฅ^>⩊<^ ฅ";
 
     /**
      * Constructs a new ListCommand with the specified arguments.
@@ -46,6 +47,9 @@ public class ListCommand extends Command {
      */
     @Override
     public String execute(Ui ui, TaskList taskList, boolean isGui) throws MayoBotException {
+        if (taskList.getSize() == 0) {
+            return EMPTY_LIST_MESSAGE;
+        }
         if (!isGui) {
             ui.showMessage(LIST_OUTPUT_HEADER);
             taskList.printTasks(ui);

@@ -1,5 +1,7 @@
 package mayobot.ui;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +12,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import mayobot.MayoBot;
 
 /**
@@ -73,12 +76,12 @@ public class MainWindow extends AnchorPane {
 
         // Check for whether the latest command was a "bye" command to exit the application
         if (mayoBot.isExit()) {
-            try {
-                Thread.sleep(250); // Pauses for 250 milliseconds (0.25 second)
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            Platform.exit();
+            // Disable input while showing goodbye message
+            userInput.setDisable(true);
+            sendButton.setDisable(true);
+
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2.5), e -> Platform.exit()));
+            timeline.play();
         }
     }
 
