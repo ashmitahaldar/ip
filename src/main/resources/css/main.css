@@ -1,5 +1,5 @@
 .root {
-    main-color: rgb(237, 255, 242);       /* Create a looked-up color called "main-color" within root. */
+    main-color: rgb(237, 255, 242);
     -fx-background-color: main-color;
     -fx-background-image: url("../images/background.png");
     -fx-background-size: 400px 100%;
@@ -9,11 +9,26 @@
 .text-field {
     -fx-background-color: #d9ffe2;
     -fx-font: 20px "Arial";
+    -fx-border-color: hotpink;
+    -fx-border-width: 2;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-font-size: 13px;
+    -fx-padding: 12 16;
+    -fx-prompt-text-fill: #000000;
+}
+
+#text-field:focused {
+    -fx-border-color: #000000;
 }
 
 .button {
     -fx-background-color: pink;
     -fx-font: italic bold 16px "Arial";
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
 .button:hover {
